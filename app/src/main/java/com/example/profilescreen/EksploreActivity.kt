@@ -29,17 +29,18 @@ val ChipGray = Color(0xFFEAEAEA)
 val YellowTag = Color(0xFFFFB300)
 val BadgeYellowBg = Color(0xFFFFF3E0)
 val BadgeYellowText = Color(0xFFE65100)
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun EksploreScreen() {
     Scaffold(
-        containerColor = BackgroundColor,
+        containerColor = BackgroundColor, // Pastikan variabel ini ada di ProfileActivity.kt
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Lokacara",
-                        color = BluePrimary,
+                        color = BluePrimary, // Pastikan variabel ini ada di ProfileActivity.kt
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 20.sp
                     )
@@ -51,60 +52,65 @@ fun EksploreScreen() {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundColor)
             )
-        },
-        bottomBar = {
-            FloatingEksploreBottomNavigationBar()
         }
+        // ❌ BOTTOM BAR DIHAPUS DARI SINI BIAR BISA MELAYANG
     ) { innerPadding ->
-        // Menggunakan LazyColumn agar layar bisa di-scroll ke bawah
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            item { Spacer(modifier = Modifier.height(4.dp)) }
 
-            // 1. Bilah Pencarian (Search Bar)
-            item {
-                CustomSearchBar()
-            }
+        // ✅ BOX UTAMA UNTUK NUMPUK KONTEN & NAVBAR
+        Box(modifier = Modifier.fillMaxSize()) {
 
-            // 2. Bagian Trending (Lagi Rame)
-            item {
-                TrendingSection()
-            }
+            // 1. KONTEN YANG BISA DI-SCROLL
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = innerPadding.calculateTopPadding()) // Cuma ambil padding atas dari Scaffold
+                    .padding(horizontal = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                item { Spacer(modifier = Modifier.height(4.dp)) }
 
-            // 3. Header Daftar Acara
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Terbaru di Sekitarmu",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
-                    Text(
-                        text = "Lihat Semua",
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp,
-                        color = BluePrimary,
-                        modifier = Modifier.clickable { }
-                    )
+                // Bilah Pencarian
+                item { CustomSearchBar() }
+
+                // Bagian Trending
+                item { TrendingSection() }
+
+                // Header Daftar Acara
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Terbaru di Sekitarmu",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                        Text(
+                            text = "Lihat Semua",
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                            color = BluePrimary,
+                            modifier = Modifier.clickable { }
+                        )
+                    }
                 }
+
+                // Daftar Acara (Event Cards)
+                items(getDummyEvents()) { event ->
+                    EventCard(event)
+                }
+
+                // Spacer diperbesar biar konten terbawah gak nyangkut di balik navbar
+                item { Spacer(modifier = Modifier.height(120.dp)) }
             }
 
-            // 4. Daftar Acara (Event Cards)
-            items(getDummyEvents()) { event ->
-                EventCard(event)
+            // ✅ 2. NAVBAR MELAYANG TRANSPARAN (Ditaruh paling bawah di dalam Box)
+            Box(modifier = Modifier.align(Alignment.BottomCenter)) {
+                FloatingEksploreBottomNavigationBar()
             }
-
-            item { Spacer(modifier = Modifier.height(100.dp)) } // Spacer hindari tertutup bottom bar
         }
     }
 }
@@ -144,14 +150,13 @@ fun CustomSearchBar() {
 fun TrendingSection() {
     Column {
         Text(
-            text = "Lagi Rame \uD83D\uDD25", // Emoji api
+            text = "Lagi Rame \uD83D\uDD25",
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             color = Color.Black
         )
         Spacer(modifier = Modifier.height(12.dp))
 
-        // FlowRow otomatis memindahkan elemen ke baris bawah jika tidak muat
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -198,7 +203,6 @@ fun EventCard(event: EventData) {
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Gambar Acara
             Image(
                 painter = painterResource(id = event.imageRes),
                 contentDescription = null,
@@ -211,7 +215,6 @@ fun EventCard(event: EventData) {
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Detail Acara
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = event.title,
@@ -239,7 +242,6 @@ fun EventCard(event: EventData) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Bagian Harga & Bookmark
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -266,19 +268,20 @@ fun EventCard(event: EventData) {
     }
 }
 
-// Komponen Navigasi Bawah Khusus Eksplore
+// Komponen Navigasi Bawah Khusus Eksplore (Sudah Melayang & Transparan)
 @Composable
 fun FloatingEksploreBottomNavigationBar() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 24.dp),
+            .navigationBarsPadding() // JURUS ANTI TENGGELAM
+            .padding(start = 18.dp, end = 18.dp, top = 18.dp, bottom = 8.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
         Surface(
             shape = RoundedCornerShape(50),
-            color = Color.White,
-            shadowElevation = 8.dp,
+            color = Color.White.copy(alpha = 0.85f), // Efek Glassmorphism nembus pandang
+            shadowElevation = 2.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -288,9 +291,9 @@ fun FloatingEksploreBottomNavigationBar() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { }) { Icon(Icons.Default.Home, contentDescription = "Home", tint = Color.LightGray) }
+                IconButton(onClick = { }) { Icon(Icons.Outlined.Home, contentDescription = "Home", tint = Color.LightGray) }
 
-                // Active menu (Explore) - Warna Biru
+                // Active menu (Explore) - Warna Biru (Ganti jadi Filled Icon)
                 IconButton(onClick = { }) { Icon(Icons.Default.Explore, contentDescription = "Explore", tint = BluePrimary) }
 
                 // Tombol Add (Tengah)
@@ -298,7 +301,7 @@ fun FloatingEksploreBottomNavigationBar() {
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
-                        .background(IconBackground)
+                        .background(IconBackground) // Pastikan variabel ini ada di ProfileActivity.kt
                         .clickable { },
                     contentAlignment = Alignment.Center
                 ) {
@@ -330,21 +333,21 @@ fun getDummyEvents(): List<EventData> {
             "24 Okt 2023 • 09:00",
             "Auditorium UNS, Surakarta",
             "Gratis",
-            R.drawable.event
+            R.drawable.event // Pastikan gambar ini ada
         ),
         EventData(
             "Festival Budaya: Harmoni Nusantara",
             "28 Okt 2023 • 15:00",
             "Pamedan Mangkunegaran",
             "Gratis",
-            R.drawable.band
+            R.drawable.band // Pastikan gambar ini ada
         ),
         EventData(
             "Workshop UI/UX: Crafting High-End Portfolios",
             "30 Okt 2023 • 10:00",
             "Creative Space Solo",
             "Gratis",
-            R.drawable.event
+            R.drawable.event // Pastikan gambar ini ada
         )
     )
 }
