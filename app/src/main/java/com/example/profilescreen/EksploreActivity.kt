@@ -44,11 +44,6 @@ fun EksploreScreen() {
                         fontSize = 20.sp
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { /* TODO */ }) {
-                        Icon(Icons.Default.Menu, contentDescription = "Menu", tint = BluePrimary)
-                    }
-                },
                 actions = {
                     IconButton(onClick = { /* TODO */ }) {
                         Icon(Icons.Default.Notifications, contentDescription = "Notifikasi", tint = BluePrimary)
