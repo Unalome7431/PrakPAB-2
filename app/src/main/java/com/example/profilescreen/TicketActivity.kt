@@ -136,7 +136,7 @@ fun TicketTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
                 .weight(1f)
                 .fillMaxHeight()
                 .clip(RoundedCornerShape(50))
-                .background(if (selectedIndex == 0) Color.White else Color.Transparent)
+                .background(if (selectedIndex == 0) Color(0xFFFFB300) else Color.Transparent)
                 .clickable { onTabSelected(0) },
             contentAlignment = Alignment.Center
         ) {
@@ -154,7 +154,7 @@ fun TicketTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
                 .weight(1f)
                 .fillMaxHeight()
                 .clip(RoundedCornerShape(50))
-                .background(if (selectedIndex == 1) Color.White else Color.Transparent)
+                .background(if (selectedIndex == 1) Color(0xFFFFB300) else Color.Transparent)
                 .clickable { onTabSelected(1) },
             contentAlignment = Alignment.Center
         ) {
