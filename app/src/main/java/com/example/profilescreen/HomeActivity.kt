@@ -1,4 +1,4 @@
-package com.example.prak2pabb // Tetap pakai package-mu!
+package com.example.profilescreen // Tetap pakai package-mu!
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -29,14 +29,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 
 // Warna kustom
-val BluePrimary = Color(0xFF1D5DEB)
-val BackgroundColor = Color(0xFFF8F9FE)
-val IconBackground = Color(0xFFE8EEFD)
 val YellowWarning = Color(0xFFFFB300)
 
-class MainActivity : ComponentActivity() {
+class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -138,75 +138,54 @@ fun FeaturedEventCard() {
             .padding(horizontal = 24.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(24.dp))
-            .background(Color(0xFF0D47A1)) // Warna dasar biru gelap pengganti gambar
+            .clickable {
+                // TODO: Aksi kalau Card Event Gede dipencet
+                println("Card Global Summit dipencet!")
+            }
     ) {
-        // Efek Gradien Gelap di bagian bawah biar teks putihnya gampang dibaca
+        // --- INI KODE BUAT NAMPILIN GAMBARNYA ---
+        // Ganti 'poster_event' dengan nama file gambar yang kamu paste di folder drawable!
+        Image(
+            painter = painterResource(id = R.drawable.event),
+            contentDescription = "Background Event",
+            contentScale = ContentScale.Crop, // Biar gambarnya proporsional memenuhi kotak
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // Efek Gradien Gelap (Biar teks putih tetap keliatan walau gambarnya terang)
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)),
-                        startY = 150f
-                    )
-                )
+                .background(Brush.verticalGradient(colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)), startY = 150f))
         )
 
-        // Label "FEATURED" di Kiri Atas
-        Surface(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(16.dp),
-            color = YellowWarning,
-            shape = RoundedCornerShape(50)
-        ) {
-            Text(
-                text = "FEATURED",
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-                color = Color.Black,
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Bold
-            )
+        // Label FEATURED
+        Surface(modifier = Modifier.align(Alignment.TopStart).padding(16.dp), color = YellowWarning, shape = RoundedCornerShape(50)) {
+            Text("FEATURED", modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp), color = Color.Black, fontSize = 10.sp, fontWeight = FontWeight.Bold)
         }
 
-        // Teks Info di Kiri Bawah
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Global Innovators\nSummit 2024",
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                lineHeight = 24.sp
-            )
+        // Teks Bawah
+        Column(modifier = Modifier.align(Alignment.BottomStart).padding(16.dp)) {
+            Text("Global Innovators\nSummit 2024", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, lineHeight = 24.sp)
             Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.DateRange, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
+                Icon(Icons.Default.DateRange, null, tint = Color.White, modifier = Modifier.size(14.dp))
                 Spacer(modifier = Modifier.width(4.dp))
                 Text("Oct 24", color = Color.White, fontSize = 12.sp)
-
                 Spacer(modifier = Modifier.width(16.dp))
-
-                Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
+                Icon(Icons.Default.LocationOn, null, tint = Color.White, modifier = Modifier.size(14.dp))
                 Spacer(modifier = Modifier.width(4.dp))
                 Text("Main Hall", color = Color.White, fontSize = 12.sp)
             }
         }
     }
 }
-
 // DESAIN BARU: Section Event Terdekat + List Horizontal
 @Composable
 fun NearbyEventsSection() {
     Column {
-        // Header Section (Judul + Lihat Semua)
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -214,53 +193,63 @@ fun NearbyEventsSection() {
                 Text("Event Terdekat", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 Text("Acara seru di sekitar kampusmu", color = Color.Gray, fontSize = 14.sp)
             }
-            Text("Lihat Semua", color = BluePrimary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            // TAMBAH KLIK DI SINI:
+            Text(
+                text = "Lihat Semua",
+                color = BluePrimary,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable {
+                    // TODO: Aksi kalau tulisan Lihat Semua dipencet
+                    println("Tulisan Lihat Semua Dipencet!")
+                }
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // List Card Kecil
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(horizontal = 24.dp)
         ) {
-            items(2) { // Menampilkan 2 card
-                NearbyEventCard()
-            }
+            items(2) { NearbyEventCard() }
         }
     }
 }
-
 // DESAIN BARU: Card Kecil dengan tombol Join Event
 @Composable
 fun NearbyEventCard() {
     Card(
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), // Flat design
-        modifier = Modifier.width(260.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        modifier = Modifier
+            .width(260.dp)
+            .clickable {
+                // TODO: Aksi kalau Card Kecil dipencet
+                println("Card Indie Night dipencet!")
+            }
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            // Gambar + Bulatan Tanggal
+
+            // --- INI KODE GAMBAR BUAT CARD KECIL ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(140.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF424242)) // Placeholder gambar band
             ) {
-                // Bulatan Tanggal di Kanan Atas
-                Surface(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(8.dp),
-                    shape = CircleShape,
-                    color = Color.White
-                ) {
-                    Column(
-                        modifier = Modifier.padding(12.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                // Ganti 'indie_band' dengan nama file gambar keduamu
+                Image(
+                    painter = painterResource(id = R.drawable.band),
+                    contentDescription = "Poster Indie",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                // Bulatan Tanggal
+                Surface(modifier = Modifier.align(Alignment.TopEnd).padding(8.dp), shape = CircleShape, color = Color.White) {
+                    Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("20", color = BluePrimary, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                         Text("OCT", color = Color.Gray, fontSize = 10.sp)
                     }
@@ -268,64 +257,24 @@ fun NearbyEventCard() {
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-
-            // Judul & Lokasi
             Text("Indie Night Session", fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Spacer(modifier = Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(14.dp))
+                Icon(Icons.Default.LocationOn, null, tint = Color.Gray, modifier = Modifier.size(14.dp))
                 Spacer(modifier = Modifier.width(4.dp))
                 Text("Student Lounge • 1.2km", color = Color.Gray, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-
-            // Tombol Join Event
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ){
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
                 Button(
-                onClick = { },
-                modifier = Modifier.width(180.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
-                shape = RoundedCornerShape(50)
-
-            ) {
-                Text("Join Event", fontWeight = FontWeight.Bold)
+                    onClick = { /* Bisa ditaruh aksi khusus tombol ini juga */ },
+                    modifier = Modifier.width(180.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
+                    shape = RoundedCornerShape(50)
+                ) {
+                    Text("Join Event", fontWeight = FontWeight.Bold)
                 }
-            }
-        }
-    }
-}
-
-// Copy fungsi Bottom Bar kamu di sini (agar tidak panjang, aku tulis pemanggilannya saja)
-@Composable
-fun FloatingBottomNavigationBar() {
-    // Sama persis dengan kode kamu sebelumnya!
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 24.dp, vertical = 24.dp), contentAlignment = Alignment.BottomCenter) {
-        Surface(shape = RoundedCornerShape(50), color = Color.White, shadowElevation = 8.dp, modifier = Modifier.fillMaxWidth()) {
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { }) { Icon(Icons.Default.Home, null, tint = BluePrimary) }
-                IconButton(onClick = { }) { Icon(Icons.Outlined.Explore, null, tint = Color.LightGray) }
-                Box(modifier = Modifier
-                    .size(48.dp)
-                    .clip(CircleShape)
-                    .background(IconBackground)
-                    .clickable { }, contentAlignment = Alignment.Center) {
-                    Box(modifier = Modifier
-                        .size(32.dp)
-                        .clip(CircleShape)
-                        .background(BluePrimary), contentAlignment = Alignment.Center) {
-                        Icon(Icons.Default.Add, null, tint = Color.White)
-                    }
-                }
-                IconButton(onClick = { }) { Icon(Icons.Outlined.ConfirmationNumber, null, tint = Color.LightGray) }
-                IconButton(onClick = { }) { Icon(Icons.Default.Person, null, tint = Color.LightGray) }
             }
         }
     }
