@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-class MainActivity : ComponentActivity() {
+class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -59,16 +59,6 @@ fun ProfileScreen() {
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 20.sp
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { /* TODO: Handle menu */ }) {
-                        Icon(Icons.Default.Menu, contentDescription = "Menu", tint = BluePrimary)
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { /* TODO: Handle notifications */ }) {
-                        Icon(Icons.Outlined.Notifications, contentDescription = "Notifikasi", tint = Color.DarkGray)
-                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = BackgroundColor
