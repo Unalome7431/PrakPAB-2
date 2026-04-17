@@ -70,7 +70,8 @@ fun SavedEventsScreen() {
                     fontSize = 32.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = TextDark,
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp)                )
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp)
+                )
             }
 
             item {

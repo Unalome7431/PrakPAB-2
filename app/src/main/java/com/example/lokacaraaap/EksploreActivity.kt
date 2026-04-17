@@ -43,7 +43,7 @@ fun EksploreScreen() {
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /* TODO */ }) {
+                    IconButton(onClick = {  }) {
                         Icon(Icons.Default.Notifications, contentDescription = "Notifikasi", tint = BluePrimary)
                     }
                 },
@@ -261,13 +261,13 @@ fun FloatingEksploreBottomNavigationBar() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .navigationBarsPadding() // JURUS ANTI TENGGELAM
+            .navigationBarsPadding()
             .padding(start = 18.dp, end = 18.dp, top = 18.dp, bottom = 8.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
         Surface(
             shape = RoundedCornerShape(50),
-            color = Color.White.copy(alpha = 0.85f), // Efek Glassmorphism nembus pandang
+            color = Color.White.copy(alpha = 0.85f),
             shadowElevation = 2.dp,
             modifier = Modifier.fillMaxWidth()
         ) {

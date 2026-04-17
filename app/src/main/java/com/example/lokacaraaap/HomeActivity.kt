@@ -16,7 +16,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.ConfirmationNumber
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,7 +69,7 @@ fun HomeScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = innerPadding.calculateTopPadding()) // Cuma ambil padding atas
+                    .padding(top = innerPadding.calculateTopPadding())
                     .verticalScroll(rememberScrollState())
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
@@ -74,7 +77,7 @@ fun HomeScreen() {
 
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "Pilihan Hari Ini",
+                    text = "Event Populer",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(horizontal = 24.dp)
@@ -89,7 +92,53 @@ fun HomeScreen() {
             }
 
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                FloatingBottomNavigationBar()
+                FloatingHomeBottomNavigationBar()
+            }
+        }
+    }
+}
+
+@Composable
+fun FloatingHomeBottomNavigationBar() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(start = 18.dp, end = 18.dp, top = 18.dp, bottom = 8.dp),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        Surface(
+            shape = RoundedCornerShape(50),
+            color = Color.White.copy(alpha = 0.85f),
+            shadowElevation = 2.dp,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { }) { Icon(Icons.Default.Home, contentDescription = "Home", tint = BluePrimary) }
+
+                IconButton(onClick = { }) { Icon(Icons.Default.Explore, contentDescription = "Explore", tint = Color.LightGray) }
+
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(IconBackground)
+                        .clickable { },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(BluePrimary), contentAlignment = Alignment.Center) {
+                        Icon(Icons.Default.Add, contentDescription = "Add", tint = Color.White)
+                    }
+                }
+
+                IconButton(onClick = { }) { Icon(Icons.Outlined.ConfirmationNumber, contentDescription = "Tiket", tint = Color.LightGray) }
+                IconButton(onClick = { }) { Icon(Icons.Outlined.Person, contentDescription = "Profil", tint = Color.LightGray) }
             }
         }
     }

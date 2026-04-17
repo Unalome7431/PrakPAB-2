@@ -295,7 +295,6 @@ fun FloatingTicketBottomNavigationBar() {
                     }
                 }
 
-                // Active menu (Tiket) - Warna Biru (Pakai Icon Default/Filled)
                 IconButton(onClick = { }) { Icon(Icons.Default.ConfirmationNumber, contentDescription = "Tiket", tint = BluePrimary) }
 
                 IconButton(onClick = { }) { Icon(Icons.Outlined.Person, contentDescription = "Profil", tint = Color.LightGray) }

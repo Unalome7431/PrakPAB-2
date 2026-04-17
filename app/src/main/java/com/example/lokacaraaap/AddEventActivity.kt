@@ -51,7 +51,7 @@ fun CreateEventScreen() {
             TopAppBar(
                 title = { Text("Buat Event Baru", fontWeight = FontWeight.Bold, fontSize = 18.sp) },
                 navigationIcon = {
-                    IconButton(onClick = { /* TODO: Close/Back */ }) {
+                    IconButton(onClick = { }) {
                         Icon(Icons.Default.Close, contentDescription = "Tutup")
                     }
                 },
@@ -78,7 +78,7 @@ fun CreateEventScreen() {
                     .navigationBarsPadding()
             ) {
                 Button(
-                    onClick = { /* TODO: Publish Action */ },
+                    onClick = { },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(54.dp),
@@ -146,7 +146,7 @@ fun SectionUploadPoster() {
                 .drawBehind {
                     drawRoundRect(color = Color.LightGray, style = stroke, cornerRadius = CornerRadius(40f))
                 }
-                .clickable { /* TODO: Open Image Picker */ },
+                .clickable { },
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
