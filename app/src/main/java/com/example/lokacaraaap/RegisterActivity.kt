@@ -1,4 +1,4 @@
-package com.example.profilescreen // Sesuaikan dengan nama paket proyek Anda
+package com.example.lokacaraaap // Sesuaikan dengan nama paket proyek Anda
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -1,4 +1,4 @@
-package com.example.profilescreen.ui.theme
+package com.example.lokacaraaap.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -10,8 +10,8 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.example.profilescreen.BluePrimary
-import com.example.profilescreen.BackgroundColor
+import com.example.lokacaraaap.BluePrimary
+import com.example.lokacaraaap.BackgroundColor
 
 private val DarkColorScheme = darkColorScheme(
     primary = BluePrimary,
@@ -41,7 +41,7 @@ private val LightColorScheme = lightColorScheme(
 fun ProfileScreenTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = false, // Matikan dynamic color agar konsisten dengan desain kustom
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -56,7 +56,7 @@ fun ProfileScreenTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography, // Pastikan file Typography.kt juga ada di folder ini
+        typography = Typography,
         content = content
     )
 }

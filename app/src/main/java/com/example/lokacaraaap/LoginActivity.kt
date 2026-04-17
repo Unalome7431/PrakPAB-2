@@ -1,4 +1,4 @@
-package com.example.profilescreen
+package com.example.lokacaraaap
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -23,7 +23,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.profilescreen.R
+import com.example.lokacaraaap.R
 
 
 
@@ -159,7 +159,7 @@ fun LoginScreen() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
 
                     Icon(
-                        painter = painterResource(id = com.example.profilescreen.R.drawable.icons_google),
+                        painter = painterResource(id = com.example.lokacaraaap.R.drawable.icons_google),
                         contentDescription = "Ikon Google",
                         modifier = Modifier.size(24.dp),
                         tint = Color.Unspecified
