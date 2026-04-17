@@ -31,8 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Warna khusus Home (Warna lain otomatis pinjam dari ProfileActivity)
-val YellowWarning = Color(0xFFFFB300)
 
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +48,7 @@ class HomeActivity : ComponentActivity() {
 @Composable
 fun HomeScreen() {
     Scaffold(
-        containerColor = BackgroundColor, // Ngambil dari ProfileActivity
+        containerColor = BackgroundColor,
         topBar = {
             TopAppBar(
                 title = { Text("Lokacara", color = BluePrimary, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp) },
@@ -61,13 +59,10 @@ fun HomeScreen() {
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundColor)
             )
         }
-        // BOTTOM BAR DIHAPUS DARI SINI BIAR BISA MELAYANG!
     ) { innerPadding ->
 
-        // BOX UTAMA UNTUK NUMPUK KONTEN & NAVBAR
         Box(modifier = Modifier.fillMaxSize()) {
 
-            // 1. KONTEN YANG BISA DI-SCROLL
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -90,13 +85,10 @@ fun HomeScreen() {
                 Spacer(modifier = Modifier.height(32.dp))
                 NearbyEventsSection()
 
-                // Jarak ekstra biar Card terakhir bisa nembus ke atas navbar
                 Spacer(modifier = Modifier.height(120.dp))
             }
 
-            // 2. NAVBAR MELAYANG TRANSPARAN
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                // Fungsi ini manggil kode dari ProfileActivity.kt
                 FloatingBottomNavigationBar()
             }
         }

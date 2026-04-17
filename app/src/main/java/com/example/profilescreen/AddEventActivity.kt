@@ -1,4 +1,4 @@
-package com.example.profilescreen // Sesuaikan dengan nama package-mu!
+package com.example.profilescreen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -29,11 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Warna-warna sesuai desain
-val FormBgColor = Color(0xFFF8F9FE)
-val TextFieldBgColor = Color(0xFFE8EAF6) // Warna abu-abu kebiruan untuk textfield
-val CardLightBlueBg = Color(0xFFF3F5FC) // Warna biru super muda untuk card Waktu & Kuota
-val TextSecondary = Color(0xFF757575)
+
 
 class AddEventActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +70,6 @@ fun CreateEventScreen() {
             )
         },
         bottomBar = {
-            // Tombol Terbitkan Event di bawah
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -106,42 +101,31 @@ fun CreateEventScreen() {
         ) {
             Spacer(modifier = Modifier.height(4.dp))
 
-            // 1. Poster Event (Dashed Border)
             SectionUploadPoster()
 
-            // 2. Nama Event
             CustomInputSection(title = "Nama Event", placeholder = "Contoh: Lokakarya Seni Digital")
 
-            // 3. Kategori (Dropdown Mockup)
             CustomInputSection(
                 title = "Kategori",
                 placeholder = "Pilih Kategori",
                 trailingIcon = Icons.Default.KeyboardArrowDown
             )
 
-            // 4. Penyelenggara
             CustomInputSection(title = "Event Organizer", placeholder = "Nama Penyelenggara")
 
-            // 5. Waktu & Tanggal (Dalam Card)
             SectionDateTime()
 
-            // 6. Lokasi Event (Toggle Offline/Online)
             SectionLocation()
 
-            // 7. Deskripsi (Text Area)
             SectionDescription()
 
-            // 8. Kuota Peserta (Stepper)
             SectionQuota()
 
-            Spacer(modifier = Modifier.height(40.dp)) // Jarak aman bawah
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }
 
-// ==========================================
-// KOMPONEN-KOMPONEN KECIL (Reusable)
-// ==========================================
 
 @Composable
 fun SectionTitle(title: String) {
@@ -154,7 +138,6 @@ fun SectionUploadPoster() {
         SectionTitle("Poster Event")
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Kotak Garis Putus-putus
         val stroke = Stroke(width = 4f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 20f), 0f))
         Box(
             modifier = Modifier
@@ -268,7 +251,6 @@ fun SectionLocation() {
         ) {
             SectionTitle("Lokasi Event")
 
-            // Toggle Button (Offline / Online)
             Row(
                 modifier = Modifier
                     .background(TextFieldBgColor, RoundedCornerShape(50))
@@ -324,7 +306,7 @@ fun SectionDescription() {
             placeholder = { Text("Detail Event", color = Color.Gray, fontSize = 14.sp) },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp), // Dibuat lebih tinggi karena area teks
+                .height(120.dp),
             shape = RoundedCornerShape(12.dp),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = TextFieldBgColor,
@@ -357,14 +339,12 @@ fun SectionQuota() {
                 Text("Batas maksimal\npendaftar", fontSize = 12.sp, color = TextSecondary)
             }
 
-            // Area Stepper (+ / -)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .background(Color.White, RoundedCornerShape(50))
                     .padding(4.dp)
             ) {
-                // Tombol Minus
                 IconButton(
                     onClick = { if (quota > 0) quota-- },
                     modifier = Modifier
@@ -374,7 +354,6 @@ fun SectionQuota() {
                     Icon(Icons.Default.Remove, contentDescription = "Kurang", tint = Color.Black)
                 }
 
-                // Angka Kuota
                 Text(
                     text = "$quota",
                     fontWeight = FontWeight.ExtraBold,
@@ -382,7 +361,6 @@ fun SectionQuota() {
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
 
-                // Tombol Plus
                 IconButton(
                     onClick = { quota++ },
                     modifier = Modifier

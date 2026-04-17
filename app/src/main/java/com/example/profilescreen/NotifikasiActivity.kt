@@ -1,4 +1,4 @@
-package com.example.lokacaraapp // Sesuaikan dengan nama package proyekmu
+package com.example.profilescreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,14 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-// --- W A R N A ---
-val BackgroundLight = Color(0xFFF8F9FE)
-val BluePrimary = Color(0xFF1D5DEB)
-val YellowHighlight = Color(0xFFFFB300)
-val TextDark = Color(0xFF1A1A1A)
-val TextGray = Color(0xFF757575)
-val LightBlueIconBg = Color(0xFFF0F4FF)
+import com.example.profilescreen.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,14 +30,14 @@ fun NotificationScreen() {
         containerColor = BackgroundLight,
         topBar = {
             TopAppBar(
-                title = { /* Kosongkan karena judul ada di bawah */ },
+                title = {  },
                 navigationIcon = {
-                    IconButton(onClick = { /* TODO: Aksi Kembali */ }) {
+                    IconButton(onClick = { }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
                     }
                 },
                 actions = {
-                    TextButton(onClick = { /* TODO: Tandai dibaca */ }) {
+                    TextButton(onClick = {  }) {
                         Text(
                             text = "Tandai Semua Dibaca",
                             color = BluePrimary,
@@ -57,9 +50,8 @@ fun NotificationScreen() {
             )
         },
         floatingActionButton = {
-            // Tombol Melayang (FAB) Bantuan
             FloatingActionButton(
-                onClick = { /* TODO: Buka Bantuan */ },
+                onClick = {  },
                 containerColor = BluePrimary,
                 contentColor = Color.White,
                 shape = CircleShape
@@ -68,7 +60,6 @@ fun NotificationScreen() {
             }
         }
     ) { paddingValues ->
-        // Menggunakan LazyColumn agar list notifikasi bisa di-scroll
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -76,7 +67,6 @@ fun NotificationScreen() {
                 .padding(horizontal = 24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // --- HEADER ---
             item {
                 Text(
                     text = "Notifikasi",
@@ -93,12 +83,10 @@ fun NotificationScreen() {
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            // --- KARTU HIGHLIGHT (LIVE) ---
             item {
                 LiveNotificationCard()
             }
 
-            // --- SEPARATOR JUDUL ---
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -110,7 +98,6 @@ fun NotificationScreen() {
                 )
             }
 
-            // --- DAFTAR NOTIFIKASI ---
             item {
                 NotificationItem(
                     icon = Icons.Default.ConfirmationNumber,
@@ -138,13 +125,11 @@ fun NotificationScreen() {
                 )
             }
 
-            // Spacer bawah agar item terakhir tidak tertutup FAB
             item { Spacer(modifier = Modifier.height(80.dp)) }
         }
     }
 }
 
-// Komponen Khusus untuk Kartu Kuning (LIVE)
 @Composable
 fun LiveNotificationCard() {
     Card(
@@ -158,7 +143,6 @@ fun LiveNotificationCard() {
             modifier = Modifier.padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Kotak Ikon
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -172,7 +156,6 @@ fun LiveNotificationCard() {
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                // Badge "LIVE"
                 Surface(
                     color = Color.White,
                     shape = RoundedCornerShape(50),
@@ -212,7 +195,6 @@ fun LiveNotificationCard() {
                 )
             }
 
-            // Ikon Sinyal Transparan di Kanan
             Icon(
                 Icons.Default.Sensors,
                 contentDescription = null,
@@ -223,7 +205,6 @@ fun LiveNotificationCard() {
     }
 }
 
-// Komponen Khusus untuk Item Notifikasi Putih
 @Composable
 fun NotificationItem(icon: ImageVector, title: String, description: String, time: String) {
     Card(
@@ -231,14 +212,13 @@ fun NotificationItem(icon: ImageVector, title: String, description: String, time
             .fillMaxWidth()
             .clickable { },
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), // Dibuat flat
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         shape = RoundedCornerShape(20.dp)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.Top // Teks bisa memanjang ke bawah
+            verticalAlignment = Alignment.Top
         ) {
-            // Kotak Ikon Biru Muda
             Box(
                 modifier = Modifier
                     .size(40.dp)
@@ -267,7 +247,6 @@ fun NotificationItem(icon: ImageVector, title: String, description: String, time
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Ikon Jam dan Teks Waktu
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Default.Schedule,
@@ -287,7 +266,6 @@ fun NotificationItem(icon: ImageVector, title: String, description: String, time
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Panah Kanan
             Icon(
                 Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = "Detail",

@@ -7,36 +7,27 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.profilescreen.R
 
 
-val DividerGray = Color(0xFFE0E0E0)
 
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,17 +43,15 @@ class RegisterActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen() {
-    // Variabel state untuk menampung input pengguna
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) } // State untuk mata sandi
+    var passwordVisible by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = BackgroundColor // Atur warna latar belakang
+        containerColor = BackgroundColor
     ) { innerPadding ->
-        // Area konten utama yang bisa di-scroll
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -80,7 +69,6 @@ fun RegisterScreen() {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            // --- JUDUL ---
             Text(
                 text = "Mulai\nLangkahmu",
                 modifier = Modifier.fillMaxWidth(),
@@ -134,7 +122,7 @@ fun RegisterScreen() {
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = { /* Aksi Daftar */ },
+                onClick = {  },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -167,7 +155,7 @@ fun RegisterScreen() {
             Spacer(modifier = Modifier.height(24.dp))
 
             OutlinedButton(
-                onClick = { /* Aksi Daftar dengan Google */ },
+                onClick = {  },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -212,7 +200,7 @@ fun RegisterScreen() {
                     style = MaterialTheme.typography.bodyMedium,
                     color = BluePrimary,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* Aksi Navigasi ke Layar Masuk */ }
+                    modifier = Modifier.clickable { }
                 )
             }
         }

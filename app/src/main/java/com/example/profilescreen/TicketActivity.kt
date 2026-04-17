@@ -1,4 +1,4 @@
-package com.example.profilescreen // Sesuaikan dengan package-mu
+package com.example.profilescreen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -47,11 +47,10 @@ class TicketActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TicketScreen() {
-    // State untuk ngatur Tab mana yang aktif (0 = Aktif, 1 = Riwayat)
     var selectedTabIndex by remember { mutableStateOf(0) }
 
     Scaffold(
-        containerColor = BackgroundColor, // Pastikan variabel warna ini ada di ProfileActivity.kt
+        containerColor = BackgroundColor,
         topBar = {
             TopAppBar(
                 title = {
@@ -63,7 +62,7 @@ fun TicketScreen() {
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /* TODO */ }) {
+                    IconButton(onClick = { }) {
                         Icon(Icons.Outlined.Search, contentDescription = "Cari Tiket", tint = Color.Black)
                     }
                 },
@@ -72,7 +71,6 @@ fun TicketScreen() {
         }
     ) { innerPadding ->
 
-        // BOX UTAMA (Jurus Overlapping Navbar)
         Box(modifier = Modifier.fillMaxSize()) {
 
             Column(
@@ -83,7 +81,6 @@ fun TicketScreen() {
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Custom Tab (Aktif vs Riwayat)
                 TicketTabs(
                     selectedIndex = selectedTabIndex,
                     onTabSelected = { selectedTabIndex = it }
@@ -91,7 +88,6 @@ fun TicketScreen() {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // List Tiket yang bisa di-scroll
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxSize()
@@ -99,15 +95,13 @@ fun TicketScreen() {
                     val tickets = if (selectedTabIndex == 0) getActiveTickets() else getHistoryTickets()
 
                     items(tickets) { ticket ->
-                        TicketCard(ticket = ticket, isActive = selectedTabIndex == 0)
+                        TicketCard(ticket = ticket, isActive = (selectedTabIndex == 0))
                     }
 
-                    // Spacer gajah biar list paling bawah gak ketutup navbar
                     item { Spacer(modifier = Modifier.height(120.dp)) }
                 }
             }
 
-            // NAVBAR MELAYANG TRANSPARAN
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
                 FloatingTicketBottomNavigationBar()
             }
@@ -115,13 +109,9 @@ fun TicketScreen() {
     }
 }
 
-// ==========================================
-// KOMPONEN UI
-// ==========================================
 
 @Composable
 fun TicketTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
-    // Background Tab warna abu-abu terang
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -130,7 +120,6 @@ fun TicketTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
             .padding(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Tab "Aktif"
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -148,7 +137,6 @@ fun TicketTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
             )
         }
 
-        // Tab "Riwayat"
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -173,13 +161,12 @@ fun TicketCard(ticket: TicketData, isActive: Boolean) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* TODO: Buka Detail Tiket / QR Code */ },
+            .clickable { },
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column {
-            // BAGIAN ATAS: Info Event
             Row(modifier = Modifier.padding(16.dp)) {
                 Image(
                     painter = painterResource(id = ticket.imageRes),
@@ -215,7 +202,6 @@ fun TicketCard(ticket: TicketData, isActive: Boolean) {
                 }
             }
 
-            // GARIS PUTUS-PUTUS (Dashed Line style Tiket)
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -231,7 +217,6 @@ fun TicketCard(ticket: TicketData, isActive: Boolean) {
                 )
             }
 
-            // BAGIAN BAWAH: Status & Aksi
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -245,7 +230,6 @@ fun TicketCard(ticket: TicketData, isActive: Boolean) {
                 }
 
                 if (isActive) {
-                    // Tombol E-Tiket warna biru
                     Surface(
                         color = BluePrimary.copy(alpha = 0.1f),
                         shape = RoundedCornerShape(50),
@@ -260,7 +244,6 @@ fun TicketCard(ticket: TicketData, isActive: Boolean) {
                         )
                     }
                 } else {
-                    // Badge Selesai warna abu-abu
                     Text(
                         text = "Selesai",
                         color = Color.Gray,
@@ -274,19 +257,18 @@ fun TicketCard(ticket: TicketData, isActive: Boolean) {
     }
 }
 
-// NAVBAR KHUSUS TIKET (Ikon Tiket Aktif/Biru)
 @Composable
 fun FloatingTicketBottomNavigationBar() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .navigationBarsPadding() // JURUS ANTI TENGGELAM
+            .navigationBarsPadding()
             .padding(start = 18.dp, end = 18.dp, top = 18.dp, bottom = 8.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
         Surface(
             shape = RoundedCornerShape(50),
-            color = Color.White.copy(alpha = 0.85f), // Efek nembus pandang
+            color = Color.White.copy(alpha = 0.85f),
             shadowElevation = 2.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -322,9 +304,7 @@ fun FloatingTicketBottomNavigationBar() {
     }
 }
 
-// ==========================================
-// DATA MODEL & DUMMY DATA
-// ==========================================
+
 
 data class TicketData(
     val title: String,
@@ -341,14 +321,14 @@ fun getActiveTickets(): List<TicketData> {
             date = "24 Okt 2024 • 09:00 WIB",
             location = "Main Hall, Surakarta",
             orderId = "LKC-99281X",
-            imageRes = R.drawable.event // Ganti dengan gambar aslimu
+            imageRes = R.drawable.event
         ),
         TicketData(
             title = "Indie Night Session",
             date = "20 Okt 2024 • 19:00 WIB",
             location = "Student Lounge UNS",
             orderId = "LKC-88122Y",
-            imageRes = R.drawable.band // Ganti dengan gambar aslimu
+            imageRes = R.drawable.band
         )
     )
 }
@@ -360,7 +340,7 @@ fun getHistoryTickets(): List<TicketData> {
             date = "15 Sep 2024 • 10:00 WIB",
             location = "Lab Komputer Terpadu",
             orderId = "LKC-11003Z",
-            imageRes = R.drawable.event // Ganti dengan gambar aslimu
+            imageRes = R.drawable.event
         )
     )
 }

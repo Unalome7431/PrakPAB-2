@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.sp
 import com.example.profilescreen.R
 
 
-private val OutlineGray = Color(0xFFE0E0E0)
 
 @Composable
 fun LoginScreen() {
@@ -113,14 +112,14 @@ fun LoginScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp)
-                    .clickable { /* TODO: Aksi Lupa Sandi */ },
+                    .clickable {  },
                 textAlign = TextAlign.End
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { /* TODO: Aksi Login */ },
+                onClick = { },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -149,7 +148,7 @@ fun LoginScreen() {
             Spacer(modifier = Modifier.height(24.dp))
 
             OutlinedButton(
-                onClick = { /* TODO: Login Google */ },
+                onClick = { },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -163,7 +162,7 @@ fun LoginScreen() {
                         painter = painterResource(id = com.example.profilescreen.R.drawable.icons_google),
                         contentDescription = "Ikon Google",
                         modifier = Modifier.size(24.dp),
-                        tint = Color.Unspecified // SANGAT PENTING: Agar warna-warni asli ikon Google tidak tertimpa hitam/putih
+                        tint = Color.Unspecified
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -192,7 +191,7 @@ fun LoginScreen() {
                 fontSize = 12.sp,
                 modifier = Modifier
                     .padding(bottom = 32.dp)
-                    .clickable { /* TODO: Pindah ke layar Register */ }
+                    .clickable { }
             )
         }
     }

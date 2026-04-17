@@ -25,22 +25,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-val ChipGray = Color(0xFFEAEAEA)
-val YellowTag = Color(0xFFFFB300)
-val BadgeYellowBg = Color(0xFFFFF3E0)
-val BadgeYellowText = Color(0xFFE65100)
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun EksploreScreen() {
     Scaffold(
-        containerColor = BackgroundColor, // Pastikan variabel ini ada di ProfileActivity.kt
+        containerColor = BackgroundColor,
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Lokacara",
-                        color = BluePrimary, // Pastikan variabel ini ada di ProfileActivity.kt
+                        color = BluePrimary,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 20.sp
                     )
@@ -53,29 +50,23 @@ fun EksploreScreen() {
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundColor)
             )
         }
-        // ❌ BOTTOM BAR DIHAPUS DARI SINI BIAR BISA MELAYANG
     ) { innerPadding ->
 
-        // ✅ BOX UTAMA UNTUK NUMPUK KONTEN & NAVBAR
         Box(modifier = Modifier.fillMaxSize()) {
 
-            // 1. KONTEN YANG BISA DI-SCROLL
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = innerPadding.calculateTopPadding()) // Cuma ambil padding atas dari Scaffold
+                    .padding(top = innerPadding.calculateTopPadding())
                     .padding(horizontal = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 item { Spacer(modifier = Modifier.height(4.dp)) }
 
-                // Bilah Pencarian
                 item { CustomSearchBar() }
 
-                // Bagian Trending
                 item { TrendingSection() }
 
-                // Header Daftar Acara
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -98,16 +89,13 @@ fun EksploreScreen() {
                     }
                 }
 
-                // Daftar Acara (Event Cards)
                 items(getDummyEvents()) { event ->
                     EventCard(event)
                 }
 
-                // Spacer diperbesar biar konten terbawah gak nyangkut di balik navbar
                 item { Spacer(modifier = Modifier.height(120.dp)) }
             }
 
-            // ✅ 2. NAVBAR MELAYANG TRANSPARAN (Ditaruh paling bawah di dalam Box)
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
                 FloatingEksploreBottomNavigationBar()
             }
@@ -268,7 +256,6 @@ fun EventCard(event: EventData) {
     }
 }
 
-// Komponen Navigasi Bawah Khusus Eksplore (Sudah Melayang & Transparan)
 @Composable
 fun FloatingEksploreBottomNavigationBar() {
     Box(
@@ -293,15 +280,13 @@ fun FloatingEksploreBottomNavigationBar() {
             ) {
                 IconButton(onClick = { }) { Icon(Icons.Outlined.Home, contentDescription = "Home", tint = Color.LightGray) }
 
-                // Active menu (Explore) - Warna Biru (Ganti jadi Filled Icon)
                 IconButton(onClick = { }) { Icon(Icons.Default.Explore, contentDescription = "Explore", tint = BluePrimary) }
 
-                // Tombol Add (Tengah)
                 Box(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
-                        .background(IconBackground) // Pastikan variabel ini ada di ProfileActivity.kt
+                        .background(IconBackground)
                         .clickable { },
                     contentAlignment = Alignment.Center
                 ) {
@@ -317,7 +302,6 @@ fun FloatingEksploreBottomNavigationBar() {
     }
 }
 
-// Data Model & Dummy Data
 data class EventData(
     val title: String,
     val date: String,
@@ -333,21 +317,21 @@ fun getDummyEvents(): List<EventData> {
             "24 Okt 2023 • 09:00",
             "Auditorium UNS, Surakarta",
             "Gratis",
-            R.drawable.event // Pastikan gambar ini ada
+            R.drawable.event
         ),
         EventData(
             "Festival Budaya: Harmoni Nusantara",
             "28 Okt 2023 • 15:00",
             "Pamedan Mangkunegaran",
             "Gratis",
-            R.drawable.band // Pastikan gambar ini ada
+            R.drawable.band
         ),
         EventData(
             "Workshop UI/UX: Crafting High-End Portfolios",
             "30 Okt 2023 • 10:00",
             "Creative Space Solo",
             "Gratis",
-            R.drawable.event // Pastikan gambar ini ada
+            R.drawable.event
         )
     )
 }

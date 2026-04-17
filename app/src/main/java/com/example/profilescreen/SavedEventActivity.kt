@@ -1,4 +1,4 @@
-package com.example.lokacaraapp // SESUAIKAN DENGAN NAMA PACKAGE KAMU
+package com.example.profilescreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,16 +24,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-// --- W A R N A ---
-val ChipGray = Color(0xFFE8E9F1) // Abu-abu kebiruan untuk chip non-aktif
-val ChipActive = Color(0xFFFFB300) // Kuning untuk chip aktif
-val IconBgLightBlue = Color(0xFFDEE8FF) // Latar ikon bookmark
+import com.example.profilescreen.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SavedEventsScreen() {
-    // State untuk kategori yang sedang dipilih
     var selectedCategory by remember { mutableStateOf("Tech") }
 
     Scaffold(
@@ -49,12 +44,12 @@ fun SavedEventsScreen() {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* TODO: Kembali */ }) {
+                    IconButton(onClick = { }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali", tint = BluePrimary)
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* TODO: Fitur Urutkan */ }) {
+                    IconButton(onClick = { }) {
                         Icon(Icons.Default.SwapVert, contentDescription = "Urutkan", tint = BluePrimary)
                     }
                 },
@@ -70,7 +65,6 @@ fun SavedEventsScreen() {
             contentPadding = PaddingValues(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // 1. Judul Utama
             item {
                 Text(
                     text = "Tersimpan",
@@ -80,7 +74,6 @@ fun SavedEventsScreen() {
                     modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp)                )
             }
 
-            // 2. Baris Filter Kategori (Bisa di-scroll menyamping)
             item {
                 val categories = listOf("Semua", "Tech", "Musik", "Seminar", "Olahraga")
 
@@ -99,7 +92,6 @@ fun SavedEventsScreen() {
                 }
             }
 
-            // 3. Daftar Acara yang Tersimpan
             val savedEvents = getDummySavedEvents()
             items(savedEvents) { event ->
                 SavedEventCard(event = event)
@@ -108,13 +100,12 @@ fun SavedEventsScreen() {
     }
 }
 
-// Komponen Khusus untuk Chip Kategori
 @Composable
 fun FilterChipItem(text: String, isActive: Boolean, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(50))
-            .background(if (isActive) ChipActive else ChipGray)
+            .background(if (isActive) ChipActive else ChipGrayVariant)
             .clickable { onClick() }
             .padding(horizontal = 20.dp, vertical = 10.dp)
     ) {
@@ -127,23 +118,21 @@ fun FilterChipItem(text: String, isActive: Boolean, onClick: () -> Unit) {
     }
 }
 
-// Komponen Khusus untuk Kartu Acara
 @Composable
 fun SavedEventCard(event: SavedEventData) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp)
-            .clickable { /* TODO: Ke halaman detail acara */ },
+            .clickable {  },
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp), // Desain flat (tanpa bayangan tebal)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         shape = RoundedCornerShape(24.dp)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Ikon Bookmark Biru Bulat
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -161,7 +150,6 @@ fun SavedEventCard(event: SavedEventData) {
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Teks Judul dan Subjudul
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = event.title,
@@ -183,7 +171,6 @@ fun SavedEventCard(event: SavedEventData) {
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Panah Kanan
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = "Detail",
@@ -193,7 +180,6 @@ fun SavedEventCard(event: SavedEventData) {
     }
 }
 
-// Data Model & Data Buatan (Dummy)
 data class SavedEventData(val title: String, val subtitle: String)
 
 fun getDummySavedEvents(): List<SavedEventData> {

@@ -27,12 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Warna kustom berdasarkan desain
-val BluePrimary = Color(0xFF1D5DEB)
-val BackgroundColor = Color(0xFFF8F9FE)
-val TextGray = Color(0xFF757575)
-val RedDanger = Color(0xFFD32F2F)
-val IconBackground = Color(0xFFE8EEFD)
+
 
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,17 +53,14 @@ fun ProfileScreen() {
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundColor)
             )
         }
-        // BOTTOM BAR DIHAPUS DARI SINI BIAR BISA MELAYANG!
     ) { innerPadding ->
 
-        // BOX UTAMA UNTUK NUMPUK KONTEN & NAVBAR
         Box(modifier = Modifier.fillMaxSize()) {
 
-            // 1. KONTEN YANG BISA DI-SCROLL
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = innerPadding.calculateTopPadding()) // Cuma ambil padding atas
+                    .padding(top = innerPadding.calculateTopPadding())
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -98,11 +90,9 @@ fun ProfileScreen() {
                     Text("Keluar", color = RedDanger, fontWeight = FontWeight.Bold)
                 }
 
-                // Jarak bawah ekstra biar gak ketutup navbar pas di-scroll mentok
                 Spacer(modifier = Modifier.height(120.dp))
             }
 
-            // 2. NAVBAR MELAYANG TRANSPARAN
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
                 FloatingBottomNavigationBar()
             }
@@ -126,7 +116,7 @@ fun ProfileHeader() {
         }
     }
     Spacer(modifier = Modifier.height(16.dp))
-    Text("Daffa Arrivo", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+    Text("Lionel Messi", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.Black)
     Spacer(modifier = Modifier.height(20.dp))
     Button(
         onClick = { },
@@ -167,21 +157,19 @@ fun MenuItem(icon: ImageVector, title: String) {
     }
 }
 
-// NAVBAR MILIK BERSAMA (Dipakai Home dan Profile)
 @Composable
 fun FloatingBottomNavigationBar() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .navigationBarsPadding() // JURUS ANTI TENGGELAM
+            .navigationBarsPadding()
             .padding(start = 18.dp, end = 18.dp, top = 18.dp, bottom = 8.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
         Surface(
             shape = RoundedCornerShape(50),
-            // Glass effect: Transparansi di-set 0.85f (85% putih solid, 15% nembus)
             color = Color.White.copy(alpha = 0.85f),
-            shadowElevation = 2.dp, // Elevasi dikecilin biar mulus tembusnya
+            shadowElevation = 2.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
