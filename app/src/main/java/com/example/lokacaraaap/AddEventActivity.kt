@@ -44,7 +44,8 @@ class AddEventActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateEventScreen() {
+fun CreateEventScreen(onNavigateBack: () -> Unit = {}
+) {
     Scaffold(
         containerColor = FormBgColor,
         topBar = {

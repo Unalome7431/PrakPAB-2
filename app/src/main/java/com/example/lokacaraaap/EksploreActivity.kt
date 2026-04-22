@@ -29,7 +29,11 @@ import com.example.lokacaraaap.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun EksploreScreen() {
+fun EksploreScreen(onNavigateToHome: () -> Unit = {},
+                   onNavigateToAdd: () -> Unit = {},
+                   onNavigateToTicket: () -> Unit = {},
+                   onNavigateToProfile: () -> Unit = {}
+) {
     Scaffold(
         containerColor = BackgroundColor,
         topBar = {
@@ -97,7 +101,13 @@ fun EksploreScreen() {
             }
 
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                FloatingEksploreBottomNavigationBar()
+                FloatingEksploreBottomNavigationBar(
+                    onHomeClick = onNavigateToHome,
+                    onExploreClick = {},
+                    onAddClick = onNavigateToAdd,
+                    onTicketClick = onNavigateToTicket,
+                    onProfileClick = onNavigateToProfile
+                )
             }
         }
     }
@@ -257,7 +267,15 @@ fun EventCard(event: EventData) {
 }
 
 @Composable
-fun FloatingEksploreBottomNavigationBar() {
+fun FloatingEksploreBottomNavigationBar(
+    onHomeClick: () -> Unit = {},
+    onExploreClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onTicketClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {},
+    onNotifClick: () -> Unit = {},
+    onSavedClick: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -278,16 +296,16 @@ fun FloatingEksploreBottomNavigationBar() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { }) { Icon(Icons.Outlined.Home, contentDescription = "Home", tint = Color.LightGray) }
+                IconButton(onClick = { onHomeClick() }) { Icon(Icons.Outlined.Home, contentDescription = "Home", tint = Color.LightGray) }
 
-                IconButton(onClick = { }) { Icon(Icons.Default.Explore, contentDescription = "Explore", tint = BluePrimary) }
+                IconButton(onClick = { onExploreClick() }) { Icon(Icons.Default.Explore, contentDescription = "Explore", tint = BluePrimary) }
 
                 Box(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
                         .background(IconBackground)
-                        .clickable { },
+                        .clickable { onAddClick() },
                     contentAlignment = Alignment.Center
                 ) {
                     Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(BluePrimary), contentAlignment = Alignment.Center) {
@@ -295,8 +313,8 @@ fun FloatingEksploreBottomNavigationBar() {
                     }
                 }
 
-                IconButton(onClick = { }) { Icon(Icons.Outlined.ConfirmationNumber, contentDescription = "Tiket", tint = Color.LightGray) }
-                IconButton(onClick = { }) { Icon(Icons.Outlined.Person, contentDescription = "Profil", tint = Color.LightGray) }
+                IconButton(onClick = { onTicketClick() }) { Icon(Icons.Outlined.ConfirmationNumber, contentDescription = "Tiket", tint = Color.LightGray) }
+                IconButton(onClick = { onProfileClick() }) { Icon(Icons.Outlined.Person, contentDescription = "Profil", tint = Color.LightGray) }
             }
         }
     }

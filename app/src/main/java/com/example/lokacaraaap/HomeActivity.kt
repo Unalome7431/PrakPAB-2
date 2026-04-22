@@ -49,15 +49,21 @@ class HomeActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onNavigateToExplore: () -> Unit = {},
+               onNavigateToAdd: () -> Unit = {},
+               onNavigateToTicket: () -> Unit = {},
+               onNavigateToProfile: () -> Unit = {},
+               onNavigateToNotification: () -> Unit = {},
+               onNavigateToSaved: () -> Unit = {}
+) {
     Scaffold(
         containerColor = BackgroundColor,
         topBar = {
             TopAppBar(
                 title = { Text("Lokacara", color = BluePrimary, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp) },
                 actions = {
-                    IconButton(onClick = { }) { Icon(Icons.Outlined.BookmarkBorder, null, tint = Color.Black) }
-                    IconButton(onClick = { }) { Icon(Icons.Outlined.Notifications, null, tint = Color.Black) }
+                    IconButton(onClick = onNavigateToSaved) { Icon(Icons.Outlined.BookmarkBorder, null, tint = Color.Black) }
+                    IconButton(onClick = onNavigateToNotification) { Icon(Icons.Outlined.Notifications, null, tint = Color.Black) }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundColor)
             )
@@ -92,14 +98,28 @@ fun HomeScreen() {
             }
 
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                FloatingHomeBottomNavigationBar()
+                FloatingHomeBottomNavigationBar(
+                    onHomeClick = {},
+                    onExploreClick = onNavigateToExplore,
+                    onAddClick = onNavigateToAdd,
+                    onTicketClick = onNavigateToTicket,
+                    onProfileClick = onNavigateToProfile
+                )
             }
         }
     }
 }
 
 @Composable
-fun FloatingHomeBottomNavigationBar() {
+fun FloatingHomeBottomNavigationBar(
+    onHomeClick: () -> Unit = {},
+    onExploreClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onTicketClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {},
+    onNotifClick: () -> Unit = {},
+    onSavedClick: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -120,16 +140,16 @@ fun FloatingHomeBottomNavigationBar() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { }) { Icon(Icons.Default.Home, contentDescription = "Home", tint = BluePrimary) }
+                IconButton(onClick = onHomeClick) { Icon(Icons.Default.Home, contentDescription = "Home", tint = BluePrimary) }
 
-                IconButton(onClick = { }) { Icon(Icons.Default.Explore, contentDescription = "Explore", tint = Color.LightGray) }
+                IconButton(onClick = onExploreClick) { Icon(Icons.Default.Explore, contentDescription = "Explore", tint = Color.LightGray) }
 
                 Box(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
                         .background(IconBackground)
-                        .clickable { },
+                        .clickable { onAddClick() },
                     contentAlignment = Alignment.Center
                 ) {
                     Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(BluePrimary), contentAlignment = Alignment.Center) {
@@ -137,8 +157,8 @@ fun FloatingHomeBottomNavigationBar() {
                     }
                 }
 
-                IconButton(onClick = { }) { Icon(Icons.Outlined.ConfirmationNumber, contentDescription = "Tiket", tint = Color.LightGray) }
-                IconButton(onClick = { }) { Icon(Icons.Outlined.Person, contentDescription = "Profil", tint = Color.LightGray) }
+                IconButton(onClick = onTicketClick) { Icon(Icons.Outlined.ConfirmationNumber, contentDescription = "Tiket", tint = Color.LightGray) }
+                IconButton(onClick = onProfileClick) { Icon(Icons.Outlined.Person, contentDescription = "Profil", tint = Color.LightGray) }
             }
         }
     }

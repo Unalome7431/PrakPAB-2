@@ -24,7 +24,8 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotificationScreen() {
+fun NotificationScreen(onNavigateBack: () -> Unit = {}
+) {
     Scaffold(
         containerColor = BackgroundLight,
         topBar = {

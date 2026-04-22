@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SavedEventsScreen() {
+fun SavedEventsScreen(onNavigateBack: () -> Unit = {}) {
     var selectedCategory by remember { mutableStateOf("Tech") }
 
     Scaffold(

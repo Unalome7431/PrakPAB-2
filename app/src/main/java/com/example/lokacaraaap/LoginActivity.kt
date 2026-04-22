@@ -28,7 +28,8 @@ import com.example.lokacaraaap.R
 
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(onNavigateToHome: () -> Unit = {},
+                onNavigateToRegister: () -> Unit = {}) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }

@@ -42,7 +42,10 @@ class ProfileActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(onNavigateToHome: () -> Unit = {},
+                  onNavigateToAdd: () -> Unit = {},
+                  onNavigateToTicket: () -> Unit = {},
+                  onNavigateToExplore: () -> Unit = {}) {
     Scaffold(
         containerColor = BackgroundColor,
         topBar = {

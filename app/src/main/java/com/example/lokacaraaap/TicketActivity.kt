@@ -46,7 +46,11 @@ class TicketActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TicketScreen() {
+fun TicketScreen(onNavigateToHome: () -> Unit = {},
+                 onNavigateToAdd: () -> Unit = {},
+                 onNavigateToExplore: () -> Unit = {},
+                 onNavigateToProfile: () -> Unit = {}
+) {
     var selectedTabIndex by remember { mutableStateOf(0) }
 
     Scaffold(
@@ -103,7 +107,13 @@ fun TicketScreen() {
             }
 
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                FloatingTicketBottomNavigationBar()
+                FloatingTicketBottomNavigationBar(
+                    onHomeClick = onNavigateToHome,
+                    onExploreClick = onNavigateToExplore,
+                    onAddClick = onNavigateToAdd,
+                    onTicketClick = {},
+                    onProfileClick = onNavigateToProfile
+                )
             }
         }
     }
@@ -258,7 +268,13 @@ fun TicketCard(ticket: TicketData, isActive: Boolean) {
 }
 
 @Composable
-fun FloatingTicketBottomNavigationBar() {
+fun FloatingTicketBottomNavigationBar(
+    onHomeClick: () -> Unit = {},
+    onExploreClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onTicketClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {},
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -279,25 +295,28 @@ fun FloatingTicketBottomNavigationBar() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { }) { Icon(Icons.Outlined.Home, contentDescription = "Home", tint = Color.LightGray) }
-                IconButton(onClick = { }) { Icon(Icons.Outlined.Explore, contentDescription = "Explore", tint = Color.LightGray) }
+                IconButton(onClick = {onHomeClick()}) { Icon(Icons.Outlined.Home, contentDescription = "Home", tint = Color.LightGray) }
+                IconButton(onClick = {onExploreClick()}) { Icon(Icons.Outlined.Explore, contentDescription = "Explore", tint = Color.LightGray) }
 
                 Box(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
                         .background(IconBackground)
-                        .clickable { },
+                        .clickable {onAddClick()},
                     contentAlignment = Alignment.Center
                 ) {
-                    Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(BluePrimary), contentAlignment = Alignment.Center) {
+                    Box(modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(BluePrimary), contentAlignment = Alignment.Center) {
                         Icon(Icons.Default.Add, contentDescription = "Add", tint = Color.White)
                     }
                 }
 
-                IconButton(onClick = { }) { Icon(Icons.Default.ConfirmationNumber, contentDescription = "Tiket", tint = BluePrimary) }
+                IconButton(onClick = {}) { Icon(Icons.Default.ConfirmationNumber, contentDescription = "Tiket", tint = BluePrimary) }
 
-                IconButton(onClick = { }) { Icon(Icons.Outlined.Person, contentDescription = "Profil", tint = Color.LightGray) }
+                IconButton(onClick = {onProfileClick()}) { Icon(Icons.Outlined.Person, contentDescription = "Profil", tint = Color.LightGray) }
             }
         }
     }
