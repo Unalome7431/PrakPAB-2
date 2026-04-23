@@ -43,7 +43,7 @@ fun SavedEventsScreen(onNavigateBack: () -> Unit = {}) {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = {onNavigateBack}) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali", tint = BluePrimary)
                     }
                 },
