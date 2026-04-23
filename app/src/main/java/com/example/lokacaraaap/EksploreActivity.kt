@@ -1,5 +1,10 @@
 package com.example.lokacaraaap
 
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +31,43 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lokacaraaap.*
 
+
+class EksploreActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            MaterialTheme {
+                EksploreScreen(
+                    onNavigateToHome = {
+                        val intent = Intent(this, HomeActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    },
+                    onNavigateToAdd = {
+                        val intent = Intent(this, AddEventActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    },
+                    onNavigateToTicket = {
+                        val intent = Intent(this, TicketActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    },
+                    onNavigateToProfile = {
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    }
+                )
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable

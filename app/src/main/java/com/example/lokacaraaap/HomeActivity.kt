@@ -1,5 +1,6 @@
 package com.example.lokacaraaap
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -41,7 +42,32 @@ class HomeActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MaterialTheme {
-                HomeScreen()
+                HomeScreen(
+                    onNavigateToExplore = {
+                        val intent = Intent(this, EksploreActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    },
+                    onNavigateToAdd = {
+                        val intent = Intent(this, AddEventActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    },
+                    onNavigateToTicket = {
+                        val intent = Intent(this, TicketActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    },
+                    onNavigateToProfile = {
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    }
+                )
             }
         }
     }

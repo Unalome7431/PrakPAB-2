@@ -1,5 +1,6 @@
 package com.example.lokacaraaap
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,7 +35,32 @@ class ProfileActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                ProfileScreen()
+                ProfileScreen(
+                    onNavigateToHome = {
+                        val intent = Intent(this, HomeActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    },
+                    onNavigateToExplore = {
+                        val intent = Intent(this, EksploreActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    },
+                    onNavigateToAdd = {
+                        val intent = Intent(this, AddEventActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    },
+                    onNavigateToTicket = {
+                        val intent = Intent(this, TicketActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    }
+                )
             }
         }
     }
@@ -97,7 +123,13 @@ fun ProfileScreen(onNavigateToHome: () -> Unit = {},
             }
 
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                FloatingBottomNavigationBar()
+                FloatingBottomNavigationBar(
+                    onHomeClick = onNavigateToHome,
+                    onExploreClick = onNavigateToExplore,
+                    onAddClick = onNavigateToAdd,
+                    onTicketClick = onNavigateToTicket,
+                    onProfileClick = { /* Already on Profile */ }
+                )
             }
         }
     }
@@ -161,7 +193,13 @@ fun MenuItem(icon: ImageVector, title: String) {
 }
 
 @Composable
-fun FloatingBottomNavigationBar() {
+fun FloatingBottomNavigationBar(
+    onHomeClick: () -> Unit = {},
+    onExploreClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onTicketClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -180,18 +218,18 @@ fun FloatingBottomNavigationBar() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { }) { Icon(Icons.Default.Home, contentDescription = "Home", tint = Color.LightGray) }
-                IconButton(onClick = { }) { Icon(Icons.Outlined.Explore, contentDescription = "Explore", tint = Color.LightGray) }
+                IconButton(onClick = onHomeClick) { Icon(Icons.Outlined.Home, contentDescription = "Home", tint = Color.LightGray) }
+                IconButton(onClick = onExploreClick) { Icon(Icons.Outlined.Explore, contentDescription = "Explore", tint = Color.LightGray) }
                 Box(
-                    modifier = Modifier.size(48.dp).clip(CircleShape).background(IconBackground).clickable { },
+                    modifier = Modifier.size(48.dp).clip(CircleShape).background(IconBackground).clickable { onAddClick() },
                     contentAlignment = Alignment.Center
                 ) {
                     Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(BluePrimary), contentAlignment = Alignment.Center) {
                         Icon(Icons.Default.Add, contentDescription = "Add", tint = Color.White)
                     }
                 }
-                IconButton(onClick = { }) { Icon(Icons.Outlined.ConfirmationNumber, contentDescription = "Tiket", tint = Color.LightGray) }
-                IconButton(onClick = { }) { Icon(Icons.Default.Person, contentDescription = "Profil", tint = BluePrimary) }
+                IconButton(onClick = onTicketClick) { Icon(Icons.Outlined.ConfirmationNumber, contentDescription = "Tiket", tint = Color.LightGray) }
+                IconButton(onClick = onProfileClick) { Icon(Icons.Default.Person, contentDescription = "Profil", tint = BluePrimary) }
             }
         }
     }
