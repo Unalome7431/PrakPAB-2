@@ -32,7 +32,7 @@ fun NotificationScreen(onNavigateBack: () -> Unit = {}
             TopAppBar(
                 title = {  },
                 navigationIcon = {
-                    IconButton(onClick = { onNavigateBack }) {
+                    IconButton(onClick = { onNavigateBack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
                     }
                 },
