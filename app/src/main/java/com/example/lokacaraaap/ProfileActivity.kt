@@ -27,8 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// 1. Bersihkan Activity dari Intent.
-// Navigasi sekarang dikendalikan penuh oleh ComposeApp.kt
+
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,13 +99,12 @@ fun ProfileScreen(
             }
 
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                // 2. Meneruskan parameter navigasi ke Bottom Bar
                 FloatingBottomNavigationBar(
                     onHomeClick = onNavigateToHome,
                     onExploreClick = onNavigateToExplore,
                     onAddClick = onNavigateToAdd,
                     onTicketClick = onNavigateToTicket,
-                    onProfileClick = { /* Tidak melakukan apa-apa karena sudah di halaman Profile */ }
+                    onProfileClick = { }
                 )
             }
         }

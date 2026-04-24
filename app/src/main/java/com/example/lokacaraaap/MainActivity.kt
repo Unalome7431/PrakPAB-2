@@ -10,11 +10,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 1. Mengaktifkan tampilan layar penuh (Edge-to-Edge)
         enableEdgeToEdge()
 
         setContent {
-                // 3. Panggil fungsi Navigasi Utama yang sudah dibuat di ComposeApp.kt
                 LokacaraApp()
             }
         }

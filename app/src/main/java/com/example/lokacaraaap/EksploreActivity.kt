@@ -58,7 +58,6 @@ fun EksploreScreen(
                 item { TrendingSection() }
                 item { Text("Terbaru di Sekitarmu", fontWeight = FontWeight.Bold, fontSize = 16.sp) }
 
-                // List dinamis menggunakan itemsIndexed agar mendapatkan ID/Index
                 itemsIndexed(events) { index, event ->
                     EventCard(event = event, onClick = { onNavigateToDetail(index) })
                 }

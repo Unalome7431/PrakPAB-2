@@ -58,7 +58,8 @@ fun NavDisplay(
                 onNavigateToTicket = { backStack.add(Screen.Ticket) },
                 onNavigateToProfile = { backStack.add(Screen.Profile) },
                 onNavigateToNotification = { backStack.add(Screen.Notification) },
-                onNavigateToSaved = { backStack.add(Screen.SavedEvents) }
+                onNavigateToSaved = { backStack.add(Screen.SavedEvents) },
+                onNavigateToDetail = { eventId -> backStack.add(Screen.DetailEvent(eventId)) }
             )
         }
         is Screen.Explore -> {
@@ -69,7 +70,8 @@ fun NavDisplay(
                 },
                 onNavigateToAdd = { backStack.add(Screen.AddEvent) },
                 onNavigateToTicket = { backStack.add(Screen.Ticket) },
-                onNavigateToProfile = { backStack.add(Screen.Profile) }
+                onNavigateToProfile = { backStack.add(Screen.Profile) },
+                onNavigateToDetail = { eventId -> backStack.add(Screen.DetailEvent(eventId)) }
             )
         }
         is Screen.Ticket -> {
@@ -112,6 +114,10 @@ fun NavDisplay(
             )
         }
         is Screen.DetailEvent -> {
+            DetailEventScreen(
+                eventId = currentScreen.eventId,
+                onNavigateBack = { backStack.removeLastOrNull() }
+            )
         }
         null -> {}
     }

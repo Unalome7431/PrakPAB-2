@@ -35,17 +35,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// 1. Hapus semua Intent dari Activity. Biarkan Activity ini kosong
-//    karena navigasi utama sekarang dikelola oleh ComposeApp.kt -> NavDisplay()
+
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MaterialTheme {
-                // Di sini biasanya kita memanggil LokacaraApp() jika ini adalah MainActivity.
-                // Jika ini adalah file terpisah, tidak perlu diubah,
-                // karena yang akan dipanggil oleh ComposeApp.kt adalah fungsi HomeScreen() di bawah.
                 HomeScreen()
             }
         }
@@ -100,14 +96,12 @@ fun HomeScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // 2. Hubungkan aksi klik kartu Featured ke fungsi Detail
                 featuredEvent?.let {
                     FeaturedEventCard(event = it, onClick = { onNavigateToDetail(0) })
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // 3. Teruskan onNavigateToDetail ke bagian Nearby
                 NearbyEventsSection(events = events, onEventClick = onNavigateToDetail)
 
                 Spacer(modifier = Modifier.height(120.dp))
@@ -205,7 +199,6 @@ fun CategorySection() {
     }
 }
 
-// 4. Tambahkan parameter onClick agar interaktif
 @Composable
 fun FeaturedEventCard(event: EventData, onClick: () -> Unit) {
     Box(
@@ -214,7 +207,7 @@ fun FeaturedEventCard(event: EventData, onClick: () -> Unit) {
             .padding(horizontal = 24.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(24.dp))
-            .clickable { onClick() } // Panggil parameter saat diklik
+            .clickable { onClick() }
     ) {
         Image(
             painter = painterResource(id = event.imageRes),
@@ -246,7 +239,6 @@ fun FeaturedEventCard(event: EventData, onClick: () -> Unit) {
     }
 }
 
-// 5. Teruskan parameter klik ke fungsi anak
 @Composable
 fun NearbyEventsSection(events: List<EventData>, onEventClick: (Int) -> Unit) {
     Column {
@@ -279,7 +271,6 @@ fun NearbyEventsSection(events: List<EventData>, onEventClick: (Int) -> Unit) {
     }
 }
 
-// 6. Terapkan onClick pada kartu individual
 @Composable
 fun NearbyEventCard(event: EventData, onClick: () -> Unit) {
     Card(
@@ -310,7 +301,7 @@ fun NearbyEventCard(event: EventData, onClick: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Button(
-                    onClick = onClick, // Hubungkan juga tombol ini
+                    onClick = onClick,
                     modifier = Modifier.width(180.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
                     shape = RoundedCornerShape(50)

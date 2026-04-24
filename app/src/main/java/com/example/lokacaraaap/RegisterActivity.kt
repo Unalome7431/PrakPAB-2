@@ -1,4 +1,4 @@
-package com.example.lokacaraaap // Sesuaikan dengan nama paket proyek Anda
+package com.example.lokacaraaap
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -57,7 +57,7 @@ fun RegisterScreen(onNavigateToLogin: () -> Unit = {}) {
                 .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(24.dp), // Padding standar di sekeliling
+                .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(

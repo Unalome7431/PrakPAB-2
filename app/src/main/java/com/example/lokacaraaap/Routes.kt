@@ -13,7 +13,5 @@ sealed class Screen {
     object Notification : Screen()
     object SavedEvents : Screen()
 
-    // MISI: Passing Parameter
-    // Membawa ID Event dari halaman List ke halaman Detail
     data class DetailEvent(val eventId: Int) : Screen()
 }
