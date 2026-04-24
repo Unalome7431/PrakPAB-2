@@ -200,7 +200,7 @@ fun RegisterScreen(onNavigateToLogin: () -> Unit = {}) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = BluePrimary,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { }
+                    modifier = Modifier.clickable { onNavigateToLogin() }
                 )
             }
         }

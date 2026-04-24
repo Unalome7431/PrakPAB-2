@@ -46,7 +46,8 @@ fun ProfileScreen(
     onNavigateToHome: () -> Unit = {},
     onNavigateToAdd: () -> Unit = {},
     onNavigateToTicket: () -> Unit = {},
-    onNavigateToExplore: () -> Unit = {}
+    onNavigateToExplore: () -> Unit = {},
+    onLogout: () -> Unit = {}
 ) {
     Scaffold(
         containerColor = BackgroundColor,
@@ -88,7 +89,7 @@ fun ProfileScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { /* Aksi Logout (misal: kembali ke Login) */ }.padding(8.dp)
+                    modifier = Modifier.clickable { onLogout() }.padding(8.dp)
                 ) {
                     Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Keluar", tint = RedDanger)
                     Spacer(modifier = Modifier.width(8.dp))

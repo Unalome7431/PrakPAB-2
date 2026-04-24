@@ -120,7 +120,7 @@ fun LoginScreen(onNavigateToHome: () -> Unit = {},
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { },
+                onClick = { onNavigateToHome() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -192,7 +192,7 @@ fun LoginScreen(onNavigateToHome: () -> Unit = {},
                 fontSize = 12.sp,
                 modifier = Modifier
                     .padding(bottom = 32.dp)
-                    .clickable { }
+                    .clickable { onNavigateToRegister() }
             )
         }
     }
