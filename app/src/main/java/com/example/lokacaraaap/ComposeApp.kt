@@ -65,7 +65,6 @@ fun NavDisplay(
         is Screen.Explore -> {
             EksploreScreen(
                 onNavigateToHome = {
-                    backStack.clear()
                     backStack.add(Screen.Home)
                 },
                 onNavigateToAdd = { backStack.add(Screen.AddEvent) },
@@ -85,7 +84,6 @@ fun NavDisplay(
         is Screen.Profile -> {
             ProfileScreen(
                 onNavigateToHome = {
-                    backStack.clear()
                     backStack.add(Screen.Home)
                 },
                 onNavigateToExplore = { backStack.add(Screen.Explore) },
