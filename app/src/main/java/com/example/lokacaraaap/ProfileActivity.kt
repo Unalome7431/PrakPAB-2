@@ -1,6 +1,5 @@
 package com.example.lokacaraaap
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -28,39 +27,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-
-
+// 1. Bersihkan Activity dari Intent.
+// Navigasi sekarang dikendalikan penuh oleh ComposeApp.kt
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                ProfileScreen(
-                    onNavigateToHome = {
-                        val intent = Intent(this, HomeActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    },
-                    onNavigateToExplore = {
-                        val intent = Intent(this, EksploreActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    },
-                    onNavigateToAdd = {
-                        val intent = Intent(this, AddEventActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    },
-                    onNavigateToTicket = {
-                        val intent = Intent(this, TicketActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    }
-                )
+                ProfileScreen()
             }
         }
     }
@@ -68,10 +42,12 @@ class ProfileActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(onNavigateToHome: () -> Unit = {},
-                  onNavigateToAdd: () -> Unit = {},
-                  onNavigateToTicket: () -> Unit = {},
-                  onNavigateToExplore: () -> Unit = {}) {
+fun ProfileScreen(
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToAdd: () -> Unit = {},
+    onNavigateToTicket: () -> Unit = {},
+    onNavigateToExplore: () -> Unit = {}
+) {
     Scaffold(
         containerColor = BackgroundColor,
         topBar = {
@@ -112,7 +88,7 @@ fun ProfileScreen(onNavigateToHome: () -> Unit = {},
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { }.padding(8.dp)
+                    modifier = Modifier.clickable { /* Aksi Logout (misal: kembali ke Login) */ }.padding(8.dp)
                 ) {
                     Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Keluar", tint = RedDanger)
                     Spacer(modifier = Modifier.width(8.dp))
@@ -123,12 +99,13 @@ fun ProfileScreen(onNavigateToHome: () -> Unit = {},
             }
 
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
+                // 2. Meneruskan parameter navigasi ke Bottom Bar
                 FloatingBottomNavigationBar(
                     onHomeClick = onNavigateToHome,
                     onExploreClick = onNavigateToExplore,
                     onAddClick = onNavigateToAdd,
                     onTicketClick = onNavigateToTicket,
-                    onProfileClick = { /* Already on Profile */ }
+                    onProfileClick = { /* Tidak melakukan apa-apa karena sudah di halaman Profile */ }
                 )
             }
         }

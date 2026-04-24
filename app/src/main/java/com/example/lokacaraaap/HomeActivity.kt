@@ -1,6 +1,5 @@
 package com.example.lokacaraaap
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -31,43 +30,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-
+// 1. Hapus semua Intent dari Activity. Biarkan Activity ini kosong
+//    karena navigasi utama sekarang dikelola oleh ComposeApp.kt -> NavDisplay()
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MaterialTheme {
-                HomeScreen(
-                    onNavigateToExplore = {
-                        val intent = Intent(this, EksploreActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    },
-                    onNavigateToAdd = {
-                        val intent = Intent(this, AddEventActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    },
-                    onNavigateToTicket = {
-                        val intent = Intent(this, TicketActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    },
-                    onNavigateToProfile = {
-                        val intent = Intent(this, ProfileActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    }
-                )
+                // Di sini biasanya kita memanggil LokacaraApp() jika ini adalah MainActivity.
+                // Jika ini adalah file terpisah, tidak perlu diubah,
+                // karena yang akan dipanggil oleh ComposeApp.kt adalah fungsi HomeScreen() di bawah.
+                HomeScreen()
             }
         }
     }
@@ -75,12 +54,14 @@ class HomeActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onNavigateToExplore: () -> Unit = {},
-               onNavigateToAdd: () -> Unit = {},
-               onNavigateToTicket: () -> Unit = {},
-               onNavigateToProfile: () -> Unit = {},
-               onNavigateToNotification: () -> Unit = {},
-               onNavigateToSaved: () -> Unit = {}
+fun HomeScreen(
+    onNavigateToExplore: () -> Unit = {},
+    onNavigateToAdd: () -> Unit = {},
+    onNavigateToTicket: () -> Unit = {},
+    onNavigateToProfile: () -> Unit = {},
+    onNavigateToNotification: () -> Unit = {},
+    onNavigateToSaved: () -> Unit = {},
+    onNavigateToDetail: (Int) -> Unit = {}
 ) {
     Scaffold(
         containerColor = BackgroundColor,
@@ -107,6 +88,9 @@ fun HomeScreen(onNavigateToExplore: () -> Unit = {},
                 Spacer(modifier = Modifier.height(8.dp))
                 CategorySection()
 
+                val events = getDummyEvents()
+                val featuredEvent = events.firstOrNull()
+
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = "Event Populer",
@@ -115,10 +99,16 @@ fun HomeScreen(onNavigateToExplore: () -> Unit = {},
                     modifier = Modifier.padding(horizontal = 24.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                FeaturedEventCard()
+
+                // 2. Hubungkan aksi klik kartu Featured ke fungsi Detail
+                featuredEvent?.let {
+                    FeaturedEventCard(event = it, onClick = { onNavigateToDetail(0) })
+                }
 
                 Spacer(modifier = Modifier.height(32.dp))
-                NearbyEventsSection()
+
+                // 3. Teruskan onNavigateToDetail ke bagian Nearby
+                NearbyEventsSection(events = events, onEventClick = onNavigateToDetail)
 
                 Spacer(modifier = Modifier.height(120.dp))
             }
@@ -138,13 +128,11 @@ fun HomeScreen(onNavigateToExplore: () -> Unit = {},
 
 @Composable
 fun FloatingHomeBottomNavigationBar(
-    onHomeClick: () -> Unit = {},
-    onExploreClick: () -> Unit = {},
-    onAddClick: () -> Unit = {},
-    onTicketClick: () -> Unit = {},
-    onProfileClick: () -> Unit = {},
-    onNotifClick: () -> Unit = {},
-    onSavedClick: () -> Unit = {}
+    onHomeClick: () -> Unit,
+    onExploreClick: () -> Unit,
+    onAddClick: () -> Unit,
+    onTicketClick: () -> Unit,
+    onProfileClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -217,18 +205,19 @@ fun CategorySection() {
     }
 }
 
+// 4. Tambahkan parameter onClick agar interaktif
 @Composable
-fun FeaturedEventCard() {
+fun FeaturedEventCard(event: EventData, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(24.dp))
-            .clickable { println("Card Global Summit dipencet!") }
+            .clickable { onClick() } // Panggil parameter saat diklik
     ) {
         Image(
-            painter = painterResource(id = R.drawable.event),
+            painter = painterResource(id = event.imageRes),
             contentDescription = "Background Event",
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
@@ -242,23 +231,24 @@ fun FeaturedEventCard() {
             Text("FEATURED", modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp), color = Color.Black, fontSize = 10.sp, fontWeight = FontWeight.Bold)
         }
         Column(modifier = Modifier.align(Alignment.BottomStart).padding(16.dp)) {
-            Text("Global Innovators\nSummit 2024", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, lineHeight = 24.sp)
+            Text(event.title, color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, lineHeight = 24.sp, maxLines = 2)
             Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Default.DateRange, null, tint = Color.White, modifier = Modifier.size(14.dp))
                 Spacer(modifier = Modifier.width(4.dp))
-                Text("Oct 24", color = Color.White, fontSize = 12.sp)
+                Text(event.date, color = Color.White, fontSize = 12.sp)
                 Spacer(modifier = Modifier.width(16.dp))
                 Icon(Icons.Default.LocationOn, null, tint = Color.White, modifier = Modifier.size(14.dp))
                 Spacer(modifier = Modifier.width(4.dp))
-                Text("Main Hall", color = Color.White, fontSize = 12.sp)
+                Text(event.location, color = Color.White, fontSize = 12.sp, maxLines = 1)
             }
         }
     }
 }
 
+// 5. Teruskan parameter klik ke fungsi anak
 @Composable
-fun NearbyEventsSection() {
+fun NearbyEventsSection(events: List<EventData>, onEventClick: (Int) -> Unit) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
@@ -274,7 +264,7 @@ fun NearbyEventsSection() {
                 color = BluePrimary,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { println("Tulisan Lihat Semua Dipencet!") }
+                modifier = Modifier.clickable { /* Aksi Lihat Semua */ }
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -282,48 +272,45 @@ fun NearbyEventsSection() {
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(horizontal = 24.dp)
         ) {
-            items(2) { NearbyEventCard() }
+            items(events.size) { index ->
+                NearbyEventCard(event = events[index], onClick = { onEventClick(index) })
+            }
         }
     }
 }
 
+// 6. Terapkan onClick pada kartu individual
 @Composable
-fun NearbyEventCard() {
+fun NearbyEventCard(event: EventData, onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = Modifier.width(260.dp).clickable { println("Card Indie Night dipencet!") }
+        modifier = Modifier.width(260.dp).clickable { onClick() }
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Box(
                 modifier = Modifier.fillMaxWidth().height(140.dp).clip(RoundedCornerShape(16.dp))
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.band),
-                    contentDescription = "Poster Indie",
+                    painter = painterResource(id = event.imageRes),
+                    contentDescription = "Poster",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
-                Surface(modifier = Modifier.align(Alignment.TopEnd).padding(8.dp), shape = CircleShape, color = Color.White) {
-                    Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("20", color = BluePrimary, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                        Text("OCT", color = Color.Gray, fontSize = 10.sp)
-                    }
-                }
             }
             Spacer(modifier = Modifier.height(12.dp))
-            Text("Indie Night Session", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(event.title, fontWeight = FontWeight.Bold, fontSize = 18.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(modifier = Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Default.LocationOn, null, tint = Color.Gray, modifier = Modifier.size(14.dp))
                 Spacer(modifier = Modifier.width(4.dp))
-                Text("Student Lounge • 1.2km", color = Color.Gray, fontSize = 12.sp)
+                Text(event.location, color = Color.Gray, fontSize = 12.sp, maxLines = 1)
             }
             Spacer(modifier = Modifier.height(16.dp))
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Button(
-                    onClick = { println("Tombol Join Event dipencet!") },
+                    onClick = onClick, // Hubungkan juga tombol ini
                     modifier = Modifier.width(180.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
                     shape = RoundedCornerShape(50)

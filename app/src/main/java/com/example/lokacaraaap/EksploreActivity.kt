@@ -1,16 +1,9 @@
 package com.example.lokacaraaap
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -29,114 +22,45 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.lokacaraaap.*
 
-
-class EksploreActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MaterialTheme {
-                EksploreScreen(
-                    onNavigateToHome = {
-                        val intent = Intent(this, HomeActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    },
-                    onNavigateToAdd = {
-                        val intent = Intent(this, AddEventActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    },
-                    onNavigateToTicket = {
-                        val intent = Intent(this, TicketActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    },
-                    onNavigateToProfile = {
-                        val intent = Intent(this, ProfileActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                    }
-                )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EksploreScreen(onNavigateToHome: () -> Unit = {},
-                   onNavigateToAdd: () -> Unit = {},
-                   onNavigateToTicket: () -> Unit = {},
-                   onNavigateToProfile: () -> Unit = {}
+fun EksploreScreen(
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToAdd: () -> Unit = {},
+    onNavigateToTicket: () -> Unit = {},
+    onNavigateToProfile: () -> Unit = {},
+    onNavigateToDetail: (Int) -> Unit = {}
 ) {
+    val events = getDummyEvents()
+
     Scaffold(
         containerColor = BackgroundColor,
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = "Lokacara",
-                        color = BluePrimary,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 20.sp
-                    )
-                },
+                title = { Text("Eksplorasi", color = BluePrimary, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp) },
                 actions = {
-                    IconButton(onClick = {  }) {
-                        Icon(Icons.Default.Notifications, contentDescription = "Notifikasi", tint = BluePrimary)
-                    }
+                    IconButton(onClick = { }) { Icon(Icons.Default.Notifications, null, tint = BluePrimary) }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundColor)
             )
         }
     ) { innerPadding ->
-
         Box(modifier = Modifier.fillMaxSize()) {
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = innerPadding.calculateTopPadding())
                     .padding(horizontal = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                item { Spacer(modifier = Modifier.height(4.dp)) }
-
                 item { CustomSearchBar() }
-
                 item { TrendingSection() }
+                item { Text("Terbaru di Sekitarmu", fontWeight = FontWeight.Bold, fontSize = 16.sp) }
 
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Terbaru di Sekitarmu",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
-                            color = Color.Black
-                        )
-                        Text(
-                            text = "Lihat Semua",
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 12.sp,
-                            color = BluePrimary,
-                            modifier = Modifier.clickable { }
-                        )
-                    }
-                }
-
-                items(getDummyEvents()) { event ->
-                    EventCard(event)
+                // List dinamis menggunakan itemsIndexed agar mendapatkan ID/Index
+                itemsIndexed(events) { index, event ->
+                    EventCard(event = event, onClick = { onNavigateToDetail(index) })
                 }
 
                 item { Spacer(modifier = Modifier.height(120.dp)) }
@@ -158,30 +82,20 @@ fun EksploreScreen(onNavigateToHome: () -> Unit = {},
 @Composable
 fun CustomSearchBar() {
     var text by remember { mutableStateOf("") }
-
     TextField(
         value = text,
         onValueChange = { text = it },
-        placeholder = {
-            Text(text = "Cari workshop, seminar,...", color = Color.Gray, fontSize = 14.sp)
-        },
-        leadingIcon = {
-            Icon(Icons.Default.Search, contentDescription = "Cari", tint = Color.Gray)
-        },
-        trailingIcon = {
-            Icon(Icons.Default.Tune, contentDescription = "Filter", tint = BluePrimary)
-        },
+        placeholder = { Text(text = "Cari workshop, seminar,...", color = Color.Gray, fontSize = 14.sp) },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Cari", tint = Color.Gray) },
+        trailingIcon = { Icon(Icons.Default.Tune, contentDescription = "Filter", tint = BluePrimary) },
         shape = RoundedCornerShape(50),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = ChipGray,
             unfocusedContainerColor = ChipGray,
-            disabledContainerColor = ChipGray,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
         ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
+        modifier = Modifier.fillMaxWidth().height(56.dp)
     )
 }
 
@@ -189,24 +103,15 @@ fun CustomSearchBar() {
 @Composable
 fun TrendingSection() {
     Column {
-        Text(
-            text = "Lagi Rame \uD83D\uDD25",
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            color = Color.Black
-        )
+        Text("Lagi Rame \uD83D\uDD25", fontWeight = FontWeight.Bold, fontSize = 16.sp)
         Spacer(modifier = Modifier.height(12.dp))
-
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             TagChip(text = "#KonserSolo", isActive = true)
             TagChip(text = "#WorkshopAI", isActive = false)
             TagChip(text = "#LombaFatisda", isActive = false)
-            TagChip(text = "#SemnasInformatika", isActive = false)
-            TagChip(text = "#CampusLife", isActive = false)
         }
     }
 }
@@ -217,27 +122,74 @@ fun TagChip(text: String, isActive: Boolean) {
         modifier = Modifier
             .clip(RoundedCornerShape(50))
             .background(if (isActive) YellowTag else ChipGray)
-            .clickable { }
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Text(
-            text = text,
-            color = if (isActive) Color.White else Color.DarkGray,
-            fontSize = 12.sp,
-            fontWeight = if (isActive) FontWeight.Bold else FontWeight.Medium
-        )
+        Text(text = text, color = if (isActive) Color.White else Color.DarkGray, fontSize = 12.sp)
     }
 }
 
 @Composable
-fun EventCard(event: EventData) {
+fun FloatingEksploreBottomNavigationBar(
+    onHomeClick: () -> Unit,
+    onExploreClick: () -> Unit,
+    onAddClick: () -> Unit,
+    onTicketClick: () -> Unit,
+    onProfileClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(18.dp),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        Surface(
+            shape = RoundedCornerShape(50),
+            color = Color.White.copy(alpha = 0.9f),
+            shadowElevation = 4.dp,
+            modifier = Modifier.fillMaxWidth() // <-- Tambahkan ini juga agar aman
+        ) {
+            Row(
+                // PERBAIKAN UTAMA DI SINI: Tambahkan fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onHomeClick) { Icon(Icons.Outlined.Home, null, tint = Color.LightGray) }
+                IconButton(onClick = onExploreClick) { Icon(Icons.Default.Explore, null, tint = BluePrimary) }
+
+                // Perbaikan style tombol Add agar sama dengan Home
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(IconBackground) // Gunakan variabel warna IconBackground kamu
+                        .clickable { onAddClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(BluePrimary), contentAlignment = Alignment.Center) {
+                        Icon(Icons.Default.Add, null, tint = Color.White)
+                    }
+                }
+
+                IconButton(onClick = onTicketClick) { Icon(Icons.Outlined.ConfirmationNumber, null, tint = Color.LightGray) }
+                IconButton(onClick = onProfileClick) { Icon(Icons.Outlined.Person, null, tint = Color.LightGray) }
+            }
+        }
+    }
+}
+
+@Composable
+fun EventCard(event: EventData, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { },
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -248,8 +200,7 @@ fun EventCard(event: EventData) {
                 contentDescription = null,
                 modifier = Modifier
                     .size(90.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color.LightGray),
+                    .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
             )
 
@@ -260,140 +211,39 @@ fun EventCard(event: EventData) {
                     text = event.title,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = Color.Black,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.height(6.dp))
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Outlined.CalendarToday, contentDescription = null, modifier = Modifier.size(12.dp), tint = TextGray)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = event.date, fontSize = 11.sp, color = TextGray)
-                }
-
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Outlined.LocationOn, contentDescription = null, modifier = Modifier.size(12.dp), tint = TextGray)
+                    Icon(
+                        Icons.Outlined.CalendarToday,
+                        contentDescription = null,
+                        modifier = Modifier.size(12.dp),
+                        tint = Color.Gray
+                    )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = event.location, fontSize = 11.sp, color = TextGray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(text = event.date, fontSize = 11.sp, color = Color.Gray)
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                Surface(
+                    color = BadgeYellowBg,
+                    shape = RoundedCornerShape(50)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(50))
-                            .background(BadgeYellowBg)
-                            .padding(horizontal = 10.dp, vertical = 4.dp)
-                    ) {
-                        Text(text = event.price, color = BadgeYellowText, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                    }
-
-                    Icon(
-                        imageVector = Icons.Default.Bookmark,
-                        contentDescription = "Simpan",
-                        tint = Color.Gray,
-                        modifier = Modifier.size(20.dp)
+                    Text(
+                        text = event.price,
+                        color = BadgeYellowText,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                     )
                 }
             }
         }
     }
-}
-
-@Composable
-fun FloatingEksploreBottomNavigationBar(
-    onHomeClick: () -> Unit = {},
-    onExploreClick: () -> Unit = {},
-    onAddClick: () -> Unit = {},
-    onTicketClick: () -> Unit = {},
-    onProfileClick: () -> Unit = {},
-    onNotifClick: () -> Unit = {},
-    onSavedClick: () -> Unit = {}
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(start = 18.dp, end = 18.dp, top = 18.dp, bottom = 8.dp),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        Surface(
-            shape = RoundedCornerShape(50),
-            color = Color.White.copy(alpha = 0.85f),
-            shadowElevation = 2.dp,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = { onHomeClick() }) { Icon(Icons.Outlined.Home, contentDescription = "Home", tint = Color.LightGray) }
-
-                IconButton(onClick = { onExploreClick() }) { Icon(Icons.Default.Explore, contentDescription = "Explore", tint = BluePrimary) }
-
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .background(IconBackground)
-                        .clickable { onAddClick() },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(BluePrimary), contentAlignment = Alignment.Center) {
-                        Icon(Icons.Default.Add, contentDescription = "Add", tint = Color.White)
-                    }
-                }
-
-                IconButton(onClick = { onTicketClick() }) { Icon(Icons.Outlined.ConfirmationNumber, contentDescription = "Tiket", tint = Color.LightGray) }
-                IconButton(onClick = { onProfileClick() }) { Icon(Icons.Outlined.Person, contentDescription = "Profil", tint = Color.LightGray) }
-            }
-        }
-    }
-}
-
-data class EventData(
-    val title: String,
-    val date: String,
-    val location: String,
-    val price: String,
-    val imageRes: Int
-)
-
-fun getDummyEvents(): List<EventData> {
-    return listOf(
-        EventData(
-            "Seminar Nasional: Masa Depan AI di Industri Kreatif",
-            "24 Okt 2023 • 09:00",
-            "Auditorium UNS, Surakarta",
-            "Gratis",
-            R.drawable.event
-        ),
-        EventData(
-            "Festival Budaya: Harmoni Nusantara",
-            "28 Okt 2023 • 15:00",
-            "Pamedan Mangkunegaran",
-            "Gratis",
-            R.drawable.band
-        ),
-        EventData(
-            "Workshop UI/UX: Crafting High-End Portfolios",
-            "30 Okt 2023 • 10:00",
-            "Creative Space Solo",
-            "Gratis",
-            R.drawable.event
-        )
-    )
 }
 
 @Preview(showBackground = true, showSystemUi = true)

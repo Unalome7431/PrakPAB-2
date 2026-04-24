@@ -4,34 +4,26 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
+// CompositionLocal untuk menyimpan BackStack
 val LocalBackStack = staticCompositionLocalOf<SnapshotStateList<Screen>> {
     error("No BackStack provided")
 }
 
 @Composable
 fun LokacaraApp() {
-    var isLoggedIn by remember { mutableStateOf(false) }
-
-    val startDestination = if (isLoggedIn) Screen.Home else Screen.Login
-    val backStack = remember { mutableStateListOf<Screen>(startDestination) }
+    val backStack = remember { mutableStateListOf<Screen>(Screen.Home) }
 
     CompositionLocalProvider(LocalBackStack provides backStack) {
         BackHandler(enabled = backStack.size > 1) {
             backStack.removeLastOrNull()
         }
 
-        NavDisplay(
-            isLoggedIn = isLoggedIn,
-            onLoginStatusChange = { isLoggedIn = it }
-        )
+        NavDisplay()
     }
 }
 
 @Composable
-fun NavDisplay(
-    isLoggedIn: Boolean,
-    onLoginStatusChange: (Boolean) -> Unit
-) {
+fun NavDisplay() {
     val backStack = LocalBackStack.current
     val currentScreen = backStack.lastOrNull()
 
@@ -39,7 +31,6 @@ fun NavDisplay(
         is Screen.Login -> {
             LoginScreen(
                 onNavigateToHome = {
-                    onLoginStatusChange(true)
                     backStack.clear()
                     backStack.add(Screen.Home)
                 },
@@ -81,21 +72,15 @@ fun NavDisplay(
             )
         }
         is Screen.Profile -> {
-            if (!isLoggedIn) {
-                LaunchedEffect(Unit) {
-                    backStack.add(Screen.Login)
-                }
-            } else {
-                ProfileScreen(
-                    onNavigateToHome = {
-                        backStack.clear()
-                        backStack.add(Screen.Home)
-                    },
-                    onNavigateToExplore = { backStack.add(Screen.Explore) },
-                    onNavigateToAdd = { backStack.add(Screen.AddEvent) },
-                    onNavigateToTicket = { backStack.add(Screen.Ticket) }
-                )
-            }
+            ProfileScreen(
+                onNavigateToHome = {
+                    backStack.clear()
+                    backStack.add(Screen.Home)
+                },
+                onNavigateToExplore = { backStack.add(Screen.Explore) },
+                onNavigateToAdd = { backStack.add(Screen.AddEvent) },
+                onNavigateToTicket = { backStack.add(Screen.Ticket) }
+            )
         }
         is Screen.AddEvent -> {
             CreateEventScreen(
@@ -113,6 +98,10 @@ fun NavDisplay(
             )
         }
         is Screen.DetailEvent -> {
+            DetailEventScreen(
+                eventId = currentScreen.eventId,
+                onNavigateBack = { backStack.removeLastOrNull() }
+            )
         }
         null -> {}
     }

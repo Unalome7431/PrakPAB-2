@@ -14,11 +14,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            // 2. Terapkan Tema Aplikasi (opsional, sesuaikan dengan nama tema Anda)
-            MaterialTheme {
                 // 3. Panggil fungsi Navigasi Utama yang sudah dibuat di ComposeApp.kt
                 LokacaraApp()
             }
         }
     }
-}
