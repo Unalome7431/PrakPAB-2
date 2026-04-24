@@ -1,95 +1,110 @@
 package com.example.lokacaraaap
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.lokacaraaap.*
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 
+// CompositionLocal untuk menyimpan BackStack
+val LocalBackStack = staticCompositionLocalOf<SnapshotStateList<Screen>> {
+    error("No BackStack provided")
+}
 
 @Composable
 fun LokacaraApp() {
-    // Membuat NavController untuk mengelola backstack
-    val navController = rememberNavController()
+    val backStack = remember { mutableStateListOf<Screen>(Screen.Home) }
 
-    NavHost(
-        navController = navController,
-        startDestination = Screen.Home.route
-    ) {
-        // --- AUTH SCREENS ---
-        composable(Screen.Login.route) {
+    CompositionLocalProvider(LocalBackStack provides backStack) {
+        BackHandler(enabled = backStack.size > 1) {
+            backStack.removeLastOrNull()
+        }
+
+        NavDisplay()
+    }
+}
+
+@Composable
+fun NavDisplay() {
+    val backStack = LocalBackStack.current
+    val currentScreen = backStack.lastOrNull()
+
+    when (currentScreen) {
+        is Screen.Login -> {
             LoginScreen(
                 onNavigateToHome = {
-                    navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Login.route) { inclusive = true }
-                    }
+                    backStack.clear()
+                    backStack.add(Screen.Home)
                 },
-                onNavigateToRegister = { navController.navigate(Screen.Register.route) }
+                onNavigateToRegister = { backStack.add(Screen.Register) }
             )
         }
-
-        composable(Screen.Register.route) {
+        is Screen.Register -> {
             RegisterScreen(
-                onNavigateToLogin = { navController.popBackStack() }
+                onNavigateToLogin = { backStack.removeLastOrNull() }
             )
         }
-
-        // --- MAIN SCREENS (BOTTOM NAV) ---
-        composable(Screen.Home.route) {
+        is Screen.Home -> {
             HomeScreen(
-                onNavigateToExplore = { navController.navigate(Screen.Explore.route) },
-                onNavigateToAdd = { navController.navigate(Screen.AddEvent.route) },
-                onNavigateToTicket = { navController.navigate(Screen.Ticket.route) },
-                onNavigateToProfile = { navController.navigate(Screen.Profile.route) },
-                onNavigateToNotification = { navController.navigate(Screen.Notification.route) },
-                onNavigateToSaved = { navController.navigate(Screen.SavedEvents.route) }
+                onNavigateToExplore = { backStack.add(Screen.Explore) },
+                onNavigateToAdd = { backStack.add(Screen.AddEvent) },
+                onNavigateToTicket = { backStack.add(Screen.Ticket) },
+                onNavigateToProfile = { backStack.add(Screen.Profile) },
+                onNavigateToNotification = { backStack.add(Screen.Notification) },
+                onNavigateToSaved = { backStack.add(Screen.SavedEvents) }
             )
         }
-
-        composable(Screen.Explore.route) {
+        is Screen.Explore -> {
             EksploreScreen(
-                onNavigateToHome = { navController.navigate(Screen.Home.route) },
-                onNavigateToAdd = { navController.navigate(Screen.AddEvent.route) },
-                onNavigateToTicket = { navController.navigate(Screen.Ticket.route) },
-                onNavigateToProfile = { navController.navigate(Screen.Profile.route) }
+                onNavigateToHome = {
+                    backStack.clear()
+                    backStack.add(Screen.Home)
+                },
+                onNavigateToAdd = { backStack.add(Screen.AddEvent) },
+                onNavigateToTicket = { backStack.add(Screen.Ticket) },
+                onNavigateToProfile = { backStack.add(Screen.Profile) }
             )
         }
-
-        composable(Screen.Ticket.route) {
+        is Screen.Ticket -> {
             TicketScreen(
-                onNavigateToHome = { navController.navigate(Screen.Home.route) },
-                onNavigateToExplore = { navController.navigate(Screen.Explore.route) },
-                onNavigateToAdd = { navController.navigate(Screen.AddEvent.route) },
-                onNavigateToProfile = { navController.navigate(Screen.Profile.route) }
+                onNavigateToHome = { backStack.add(Screen.Home) },
+                onNavigateToExplore = { backStack.add(Screen.Explore) },
+                onNavigateToAdd = { backStack.add(Screen.AddEvent) },
+                onNavigateToProfile = { backStack.add(Screen.Profile) }
             )
         }
-
-        composable(Screen.Profile.route) {
+        is Screen.Profile -> {
             ProfileScreen(
-                onNavigateToHome = { navController.navigate(Screen.Home.route) },
-                onNavigateToExplore = { navController.navigate(Screen.Explore.route) },
-                onNavigateToAdd = { navController.navigate(Screen.AddEvent.route) },
-                onNavigateToTicket = { navController.navigate(Screen.Ticket.route) }
+                onNavigateToHome = {
+                    backStack.clear()
+                    backStack.add(Screen.Home)
+                },
+                onNavigateToExplore = { backStack.add(Screen.Explore) },
+                onNavigateToAdd = { backStack.add(Screen.AddEvent) },
+                onNavigateToTicket = { backStack.add(Screen.Ticket) }
             )
         }
-
-        // --- FEATURE SCREENS ---
-        composable(Screen.AddEvent.route) {
+        is Screen.AddEvent -> {
             CreateEventScreen(
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { backStack.removeLastOrNull() }
             )
         }
-
-        composable(Screen.Notification.route) {
+        is Screen.Notification -> {
             NotificationScreen(
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { backStack.removeLastOrNull() }
             )
         }
-
-        composable(Screen.SavedEvents.route) {
+        is Screen.SavedEvents -> {
             SavedEventsScreen(
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { backStack.removeLastOrNull() }
             )
         }
+        is Screen.DetailEvent -> {
+            // Placeholder untuk Detail Event
+            /* DetailEventScreen(
+                eventId = currentScreen.eventId,
+                onNavigateBack = { backStack.removeLastOrNull() }
+            )
+            */
+        }
+        null -> {}
     }
 }

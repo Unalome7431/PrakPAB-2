@@ -1,20 +1,19 @@
-
 package com.example.lokacaraaap
 
+sealed class Screen {
+    object Login : Screen()
+    object Register : Screen()
 
-sealed class Screen(val route: String) {
-    // Autentikasi
-    object Login : Screen("login")
-    object Register : Screen("register")
+    object Home : Screen()
+    object Explore : Screen()
+    object Ticket : Screen()
+    object Profile : Screen()
 
-    // Utama (Bottom Nav)
-    object Home : Screen("home")
-    object Explore : Screen("explore")
-    object Ticket : Screen("ticket")
-    object Profile : Screen("profile")
+    object AddEvent : Screen()
+    object Notification : Screen()
+    object SavedEvents : Screen()
 
-    // Fitur Lainnya
-    object AddEvent : Screen("add_event")
-    object Notification : Screen("notification")
-    object SavedEvents : Screen("saved_events")
+    // MISI: Passing Parameter
+    // Membawa ID Event dari halaman List ke halaman Detail
+    data class DetailEvent(val eventId: Int) : Screen()
 }

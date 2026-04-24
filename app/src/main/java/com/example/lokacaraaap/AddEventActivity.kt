@@ -52,7 +52,7 @@ fun CreateEventScreen(onNavigateBack: () -> Unit = {}
             TopAppBar(
                 title = { Text("Buat Event Baru", fontWeight = FontWeight.Bold, fontSize = 18.sp) },
                 navigationIcon = {
-                    IconButton(onClick = {onNavigateBack() }) {
+                    IconButton(onClick = onNavigateBack) {
                         Icon(Icons.Default.Close, contentDescription = "Tutup")
                     }
                 },
