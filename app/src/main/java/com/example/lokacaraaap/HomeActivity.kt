@@ -68,60 +68,63 @@ fun HomeScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundColor)
             )
+        },
+        bottomBar = {
+            FloatingHomeBottomNavigationBar(
+                onHomeClick = {},
+                onExploreClick = onNavigateToExplore,
+                onAddClick = onNavigateToAdd,
+                onTicketClick = onNavigateToTicket,
+                onProfileClick = onNavigateToProfile
+            )
         }
     ) { innerPadding ->
+        HomeScreenContent(
+            innerPadding = innerPadding,
+            onNavigateToDetail = onNavigateToDetail
+        )
+    }
+}
 
-        Box(modifier = Modifier.fillMaxSize()) {
+@Composable
+private fun HomeScreenContent(
+    innerPadding: PaddingValues,
+    onNavigateToDetail: (Int) -> Unit
+) {
+    val events = getDummyEvents()
+    val featuredEvent = events.firstOrNull()
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = innerPadding.calculateTopPadding())
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CategorySection()
-                }
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = innerPadding.calculateTopPadding()),
+        contentPadding = PaddingValues(bottom = innerPadding.calculateBottomPadding() + 32.dp)
+    ) {
+        item(key = "category_section") {
+            Spacer(modifier = Modifier.height(8.dp))
+            CategorySection()
+        }
 
-                val events = getDummyEvents()
-                val featuredEvent = events.firstOrNull()
+        item(key = "popular_header") {
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "Event Populer",
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Text(
-                        text = "Event Populer",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 24.dp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                item {
-                    featuredEvent?.let {
-                        FeaturedEventCard(event = it, onClick = { onNavigateToDetail(0) })
-                    }
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(32.dp))
-                    NearbyEventsSection(events = events, onEventClick = onNavigateToDetail)
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(120.dp))
-                }
+        if (featuredEvent != null) {
+            item(key = "featured_event") {
+                FeaturedEventCard(event = featuredEvent, onClick = { onNavigateToDetail(0) })
             }
+        }
 
-            Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                FloatingHomeBottomNavigationBar(
-                    onHomeClick = {},
-                    onExploreClick = onNavigateToExplore,
-                    onAddClick = onNavigateToAdd,
-                    onTicketClick = onNavigateToTicket,
-                    onProfileClick = onNavigateToProfile
-                )
-            }
+        item(key = "nearby_section") {
+            Spacer(modifier = Modifier.height(32.dp))
+            NearbyEventsSection(events = events, onEventClick = onNavigateToDetail)
         }
     }
 }
@@ -181,20 +184,23 @@ fun FloatingHomeBottomNavigationBar(
 @Composable
 fun CategorySection() {
     val categories = listOf("Semua", "Tech", "Musik", "Seni")
-    var selectedCategory by remember { mutableStateOf("Semua") } // State untuk menyimpan kategori terpilih
+    var selectedCategory by remember { mutableStateOf("Semua") }
 
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(horizontal = 24.dp)
     ) {
-        items(categories.size) { index ->
+        items(
+            count = categories.size,
+            key = { index -> "category_${categories[index]}" }
+        ) { index ->
             val category = categories[index]
             val isSelected = category == selectedCategory
             Surface(
                 shape = RoundedCornerShape(50),
                 color = if (isSelected) YellowWarning else Color(0xFFEBEBEB),
                 modifier = Modifier.clickable { 
-                    selectedCategory = category // Update state saat diklik
+                    selectedCategory = category 
                 }
             ) {
                 Text(
@@ -266,7 +272,7 @@ fun NearbyEventsSection(events: List<EventData>, onEventClick: (Int) -> Unit) {
                 color = BluePrimary,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { /* Aksi Lihat Semua */ }
+                modifier = Modifier.clickable { }
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

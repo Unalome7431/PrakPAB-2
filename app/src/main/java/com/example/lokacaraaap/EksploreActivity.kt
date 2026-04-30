@@ -195,7 +195,7 @@ fun EventDetailBottomSheetContent(
 
         Spacer(modifier = Modifier.height(32.dp))
         Button(
-            onClick = onRegisterClick, // Panggil aksi register
+            onClick = onRegisterClick, 
             modifier = Modifier.fillMaxWidth().height(56.dp),
             colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
             shape = RoundedCornerShape(16.dp)
@@ -273,10 +273,9 @@ fun FloatingEksploreBottomNavigationBar(
             shape = RoundedCornerShape(50),
             color = Color.White.copy(alpha = 0.9f),
             shadowElevation = 4.dp,
-            modifier = Modifier.fillMaxWidth() // <-- Tambahkan ini juga agar aman
+            modifier = Modifier.fillMaxWidth() 
         ) {
             Row(
-                // PERBAIKAN UTAMA DI SINI: Tambahkan fillMaxWidth()
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 12.dp),
@@ -286,12 +285,11 @@ fun FloatingEksploreBottomNavigationBar(
                 IconButton(onClick = onHomeClick) { Icon(Icons.Outlined.Home, null, tint = Color.LightGray) }
                 IconButton(onClick = onExploreClick) { Icon(Icons.Default.Explore, null, tint = BluePrimary) }
 
-                // Perbaikan style tombol Add agar sama dengan Home
                 Box(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
-                        .background(IconBackground) // Gunakan variabel warna IconBackground kamu
+                        .background(IconBackground) 
                         .clickable { onAddClick() },
                     contentAlignment = Alignment.Center
                 ) {
