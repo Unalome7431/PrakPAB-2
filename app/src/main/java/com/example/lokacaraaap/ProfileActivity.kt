@@ -16,7 +16,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +48,31 @@ fun ProfileScreen(
     onNavigateToExplore: () -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
+    var showLogoutDialog by remember { mutableStateOf(false) }
+
+    if (showLogoutDialog) {
+        AlertDialog(
+            onDismissRequest = { showLogoutDialog = false },
+            title = { Text(text = "Konfirmasi Keluar") },
+            text = { Text("Apakah Anda yakin ingin keluar dari akun Anda?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showLogoutDialog = false
+                    onLogout()
+                }) {
+                    Text("Keluar", color = RedDanger)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showLogoutDialog = false }) {
+                    Text("Batal", color = Color.Gray)
+                }
+            },
+            containerColor = Color.White,
+            shape = RoundedCornerShape(28.dp)
+        )
+    }
+
     Scaffold(
         containerColor = BackgroundColor,
         topBar = {
@@ -57,56 +82,62 @@ fun ProfileScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundColor)
             )
+        },
+        bottomBar = {
+            FloatingBottomNavigationBar(
+                onHomeClick = onNavigateToHome,
+                onExploreClick = onNavigateToExplore,
+                onAddClick = onNavigateToAdd,
+                onTicketClick = onNavigateToTicket,
+                onProfileClick = { }
+            )
         }
     ) { innerPadding ->
+        ProfileContent(
+            innerPadding = innerPadding,
+            onShowLogout = { showLogoutDialog = true }
+        )
+    }
+}
 
-        Box(modifier = Modifier.fillMaxSize()) {
+@Composable
+private fun ProfileContent(
+    innerPadding: PaddingValues,
+    onShowLogout: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding() + 32.dp)
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(16.dp))
+        ProfileHeader()
+        Spacer(modifier = Modifier.height(24.dp))
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = innerPadding.calculateTopPadding())
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.height(16.dp))
-                ProfileHeader()
-                Spacer(modifier = Modifier.height(24.dp))
+        MenuSection {
+            MenuItem(icon = Icons.Outlined.DateRange, title = "Event yang Saya Buat")
+            MenuItem(icon = Icons.Outlined.Star, title = "E-Sertifikat Saya")
+        }
+        Spacer(modifier = Modifier.height(16.dp))
 
-                MenuSection {
-                    MenuItem(icon = Icons.Outlined.DateRange, title = "Event yang Saya Buat")
-                    MenuItem(icon = Icons.Outlined.Star, title = "E-Sertifikat Saya")
-                }
-                Spacer(modifier = Modifier.height(16.dp))
+        MenuSection {
+            MenuItem(icon = Icons.Outlined.Person, title = "Pengaturan Akun")
+            MenuItem(icon = Icons.Outlined.Info, title = "Pusat Bantuan")
+            MenuItem(icon = Icons.Outlined.Info, title = "Tentang Lokacara")
+        }
+        Spacer(modifier = Modifier.height(32.dp))
 
-                MenuSection {
-                    MenuItem(icon = Icons.Outlined.Person, title = "Pengaturan Akun")
-                    MenuItem(icon = Icons.Outlined.Info, title = "Pusat Bantuan")
-                    MenuItem(icon = Icons.Outlined.Info, title = "Tentang Lokacara")
-                }
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { onLogout() }.padding(8.dp)
-                ) {
-                    Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Keluar", tint = RedDanger)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Keluar", color = RedDanger, fontWeight = FontWeight.Bold)
-                }
-
-                Spacer(modifier = Modifier.height(120.dp))
-            }
-
-            Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                FloatingBottomNavigationBar(
-                    onHomeClick = onNavigateToHome,
-                    onExploreClick = onNavigateToExplore,
-                    onAddClick = onNavigateToAdd,
-                    onTicketClick = onNavigateToTicket,
-                    onProfileClick = { }
-                )
-            }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { onShowLogout() }
+                .padding(8.dp)
+        ) {
+            Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Keluar", tint = RedDanger)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Keluar", color = RedDanger, fontWeight = FontWeight.Bold)
         }
     }
 }

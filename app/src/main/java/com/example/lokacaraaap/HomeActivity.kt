@@ -8,11 +8,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.BookmarkBorder
@@ -21,7 +19,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -75,36 +73,44 @@ fun HomeScreen(
 
         Box(modifier = Modifier.fillMaxSize()) {
 
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = innerPadding.calculateTopPadding())
-                    .verticalScroll(rememberScrollState())
             ) {
-                Spacer(modifier = Modifier.height(8.dp))
-                CategorySection()
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CategorySection()
+                }
 
                 val events = getDummyEvents()
                 val featuredEvent = events.firstOrNull()
 
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = "Event Populer",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = 24.dp)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-
-                featuredEvent?.let {
-                    FeaturedEventCard(event = it, onClick = { onNavigateToDetail(0) })
+                item {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        text = "Event Populer",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                item {
+                    featuredEvent?.let {
+                        FeaturedEventCard(event = it, onClick = { onNavigateToDetail(0) })
+                    }
+                }
 
-                NearbyEventsSection(events = events, onEventClick = onNavigateToDetail)
+                item {
+                    Spacer(modifier = Modifier.height(32.dp))
+                    NearbyEventsSection(events = events, onEventClick = onNavigateToDetail)
+                }
 
-                Spacer(modifier = Modifier.height(120.dp))
+                item {
+                    Spacer(modifier = Modifier.height(120.dp))
+                }
             }
 
             Box(modifier = Modifier.align(Alignment.BottomCenter)) {
@@ -175,17 +181,21 @@ fun FloatingHomeBottomNavigationBar(
 @Composable
 fun CategorySection() {
     val categories = listOf("Semua", "Tech", "Musik", "Seni")
+    var selectedCategory by remember { mutableStateOf("Semua") } // State untuk menyimpan kategori terpilih
+
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(horizontal = 24.dp)
     ) {
         items(categories.size) { index ->
             val category = categories[index]
-            val isSelected = category == "Semua"
+            val isSelected = category == selectedCategory
             Surface(
                 shape = RoundedCornerShape(50),
                 color = if (isSelected) YellowWarning else Color(0xFFEBEBEB),
-                modifier = Modifier.clickable { println("Kategori $category dipencet!") }
+                modifier = Modifier.clickable { 
+                    selectedCategory = category // Update state saat diklik
+                }
             ) {
                 Text(
                     text = category,
@@ -264,7 +274,10 @@ fun NearbyEventsSection(events: List<EventData>, onEventClick: (Int) -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(horizontal = 24.dp)
         ) {
-            items(events.size) { index ->
+            items(
+                count = events.size,
+                key = { index -> "nearby_${events[index].title}_$index" }
+            ) { index ->
                 NearbyEventCard(event = events[index], onClick = { onEventClick(index) })
             }
         }
